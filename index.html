@@ -979,7 +979,8 @@
     .hero-title { font-size: clamp(4rem, 18vw, 7rem); }
   }
 </style>
-</head>
+
+  <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script></head>
 <body>
 
 <!-- Custom cursor -->
@@ -2716,5 +2717,17 @@ document.querySelectorAll('button, .day-card, .day-session-item, .enter-btn').fo
 // ─── INIT ────────────────────────────────────────────────
 renderDays();
 </script>
+
+  <script>
+    if (window.netlifyIdentity) {
+      window.netlifyIdentity.on("init", user => {
+        if (!user) {
+          window.netlifyIdentity.on("login", () => {
+            document.location.href = "/admin/";
+          });
+        }
+      });
+    }
+  </script>
 </body>
 </html>
