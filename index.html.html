@@ -1,0 +1,2720 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>N.O.R.T.H. — Navigating Our Resources Towards Harmony</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Barlow+Condensed:wght@300;400;500;600;700&family=Barlow:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --primary: #1B4D5C;
+    --secondary: #4A7C6F;
+    --accent: #C9A96E;
+    --bg-dark: #0F2D38;
+    --bg-deeper: #091E27;
+    --bg-light: #F4F0E8;
+    --text-light: #E8E4DC;
+    --text-muted: #8AAAB5;
+    --text-dark: #1A2E35;
+    --card-bg: rgba(27, 77, 92, 0.25);
+    --card-border: rgba(201, 169, 110, 0.2);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Barlow', sans-serif;
+    background: var(--bg-deeper);
+    color: var(--text-light);
+    overflow-x: hidden;
+    cursor: none;
+  }
+
+  /* Custom cursor */
+  .cursor {
+    width: 8px; height: 8px;
+    background: var(--accent);
+    border-radius: 50%;
+    position: fixed;
+    pointer-events: none;
+    z-index: 9999;
+    transition: transform 0.15s ease;
+    transform: translate(-50%, -50%);
+  }
+  .cursor-ring {
+    width: 32px; height: 32px;
+    border: 1px solid rgba(201,169,110,0.4);
+    border-radius: 50%;
+    position: fixed;
+    pointer-events: none;
+    z-index: 9998;
+    transition: transform 0.4s cubic-bezier(.23,1,.32,1), opacity 0.3s;
+    transform: translate(-50%, -50%);
+  }
+
+  /* ─── SCREENS ─── */
+  .screen {
+    display: none;
+    min-height: 100vh;
+    opacity: 0;
+    transition: opacity 0.6s ease;
+  }
+  .screen.active {
+    display: block;
+    opacity: 1;
+  }
+
+  /* ─── NOISE TEXTURE OVERLAY ─── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 1000;
+    opacity: 0.6;
+  }
+
+  /* ─── FRONTPAGE ─── */
+  #screen-home {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    overflow: hidden;
+  }
+  #screen-home.active { display: flex; }
+
+  .bg-gradient {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 80% 60% at 20% 50%, rgba(27,77,92,0.6) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 80% at 80% 30%, rgba(74,124,111,0.3) 0%, transparent 50%),
+      radial-gradient(ellipse 40% 40% at 60% 80%, rgba(201,169,110,0.1) 0%, transparent 40%),
+      var(--bg-deeper);
+    z-index: 0;
+  }
+
+  /* Animated lines */
+  .lines {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    overflow: hidden;
+  }
+  .line {
+    position: absolute;
+    background: linear-gradient(90deg, transparent, rgba(201,169,110,0.12), transparent);
+    height: 1px;
+    width: 100%;
+    animation: lineDrift linear infinite;
+  }
+  .line:nth-child(1) { top: 15%; animation-duration: 18s; animation-delay: 0s; }
+  .line:nth-child(2) { top: 35%; animation-duration: 24s; animation-delay: -6s; opacity: 0.5; }
+  .line:nth-child(3) { top: 60%; animation-duration: 20s; animation-delay: -12s; }
+  .line:nth-child(4) { top: 80%; animation-duration: 16s; animation-delay: -4s; opacity: 0.3; }
+  @keyframes lineDrift {
+    from { transform: translateX(-100%); }
+    to { transform: translateX(100%); }
+  }
+
+  /* Compass rose SVG bg */
+  .compass-bg {
+    position: absolute;
+    right: -10%;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 600px; height: 600px;
+    opacity: 0.04;
+    animation: slowRotate 60s linear infinite;
+    z-index: 1;
+  }
+  @keyframes slowRotate {
+    from { transform: translateY(-50%) rotate(0deg); }
+    to { transform: translateY(-50%) rotate(360deg); }
+  }
+
+  .hero-content {
+    position: relative;
+    z-index: 10;
+    text-align: center;
+    padding: 2rem;
+    max-width: 900px;
+  }
+
+  .hero-eyebrow {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 2rem;
+    opacity: 0;
+    animation: fadeUp 0.8s ease 0.3s forwards;
+  }
+
+  .hero-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(5rem, 14vw, 11rem);
+    font-weight: 300;
+    line-height: 0.85;
+    letter-spacing: -0.02em;
+    color: var(--text-light);
+    margin-bottom: 1.5rem;
+    opacity: 0;
+    animation: fadeUp 0.8s ease 0.5s forwards;
+  }
+
+  .hero-title span {
+    display: block;
+    font-style: italic;
+    color: var(--accent);
+    font-size: 0.45em;
+    letter-spacing: 0.15em;
+    font-weight: 300;
+    margin-top: 0.5rem;
+  }
+
+  .hero-subtitle {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 1rem;
+    font-weight: 300;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 0.5rem;
+    opacity: 0;
+    animation: fadeUp 0.8s ease 0.7s forwards;
+  }
+
+  .hero-meta {
+    font-family: 'Barlow', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 300;
+    color: var(--text-muted);
+    margin-bottom: 3.5rem;
+    opacity: 0;
+    animation: fadeUp 0.8s ease 0.8s forwards;
+  }
+
+  .hero-divider {
+    width: 60px;
+    height: 1px;
+    background: var(--accent);
+    margin: 1.5rem auto;
+    opacity: 0;
+    animation: fadeUp 0.8s ease 0.9s forwards;
+  }
+
+  .countries-row {
+    display: flex;
+    justify-content: center;
+    gap: 2.5rem;
+    margin-bottom: 3.5rem;
+    opacity: 0;
+    animation: fadeUp 0.8s ease 1s forwards;
+  }
+  .country-tag {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.7rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .country-tag::before {
+    content: '';
+    width: 4px; height: 4px;
+    border-radius: 50%;
+    background: var(--accent);
+    opacity: 0.6;
+  }
+
+  .enter-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 2.5rem;
+    border: 1px solid rgba(201,169,110,0.4);
+    background: transparent;
+    color: var(--accent);
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 500;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    cursor: none;
+    transition: all 0.4s ease;
+    position: relative;
+    overflow: hidden;
+    opacity: 0;
+    animation: fadeUp 0.8s ease 1.2s forwards;
+  }
+  .enter-btn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(201,169,110,0.08);
+    transform: translateX(-100%);
+    transition: transform 0.4s ease;
+  }
+  .enter-btn:hover::before { transform: translateX(0); }
+  .enter-btn:hover { border-color: var(--accent); letter-spacing: 0.4em; }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ─── PROGRAMME OVERVIEW ─── */
+  #screen-programme {
+    padding: 0;
+  }
+  #screen-programme.active { display: block; }
+
+  .prog-header {
+    background: var(--bg-dark);
+    border-bottom: 1px solid rgba(201,169,110,0.15);
+    padding: 1.5rem 3rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .prog-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.8rem;
+    font-weight: 300;
+    color: var(--text-light);
+    letter-spacing: 0.1em;
+  }
+  .prog-logo em {
+    font-style: italic;
+    color: var(--accent);
+  }
+
+  .back-btn {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.7rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    background: none;
+    border: none;
+    cursor: none;
+    transition: color 0.3s;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .back-btn:hover { color: var(--accent); }
+  .back-btn::before { content: '←'; }
+
+  .prog-hero {
+    background: linear-gradient(135deg, var(--bg-dark) 0%, var(--bg-deeper) 100%);
+    padding: 5rem 3rem 4rem;
+    text-align: center;
+    border-bottom: 1px solid rgba(201,169,110,0.1);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .prog-hero::before {
+    content: 'PROGRAMME';
+    position: absolute;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 12rem;
+    font-weight: 300;
+    color: rgba(255,255,255,0.02);
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    white-space: nowrap;
+    pointer-events: none;
+  }
+
+  .prog-hero h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 3rem;
+    font-weight: 300;
+    color: var(--text-light);
+    margin-bottom: 0.75rem;
+  }
+  .prog-hero p {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.8rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+
+  /* Days grid */
+  .days-grid {
+    padding: 3rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 1.5rem;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+
+  .day-card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    padding: 2rem;
+    cursor: none;
+    transition: all 0.4s ease;
+    position: relative;
+    overflow: hidden;
+    backdrop-filter: blur(10px);
+  }
+
+  .day-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 3px;
+    height: 0;
+    background: var(--accent);
+    transition: height 0.4s ease;
+  }
+  .day-card:hover::before { height: 100%; }
+  .day-card:hover {
+    background: rgba(27,77,92,0.4);
+    border-color: rgba(201,169,110,0.4);
+    transform: translateY(-2px);
+  }
+
+  .day-number {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 4rem;
+    font-weight: 300;
+    color: rgba(201,169,110,0.15);
+    line-height: 1;
+    margin-bottom: 0.5rem;
+    transition: color 0.4s;
+  }
+  .day-card:hover .day-number { color: rgba(201,169,110,0.3); }
+
+  .day-date {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 0.75rem;
+  }
+
+  .day-theme {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.4rem;
+    font-weight: 400;
+    color: var(--text-light);
+    margin-bottom: 1.25rem;
+    line-height: 1.3;
+  }
+
+  .day-sessions {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+
+  .day-session-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    cursor: none;
+    padding: 0.5rem 0.75rem;
+    margin: 0 -0.75rem;
+    border-radius: 2px;
+    transition: background 0.3s;
+  }
+  .day-session-item:hover { background: rgba(201,169,110,0.06); }
+
+  .session-slot {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    opacity: 0.8;
+    min-width: 28px;
+    padding-top: 1px;
+  }
+
+  .session-name {
+    font-family: 'Barlow', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 300;
+    color: var(--text-muted);
+    line-height: 1.4;
+    transition: color 0.3s;
+  }
+  .day-session-item:hover .session-name { color: var(--text-light); }
+
+  .session-arrow {
+    margin-left: auto;
+    color: var(--accent);
+    opacity: 0;
+    transition: opacity 0.3s, transform 0.3s;
+    font-size: 0.7rem;
+  }
+  .day-session-item:hover .session-arrow { opacity: 1; transform: translateX(3px); }
+
+  .day-evening {
+    margin-top: 1.25rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid rgba(201,169,110,0.1);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .evening-icon { font-size: 0.8rem; }
+  .evening-label {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    opacity: 0.7;
+    font-style: italic;
+  }
+
+  /* ─── SESSION SCREEN ─── */
+  #screen-session {
+    min-height: 100vh;
+    background: var(--bg-deeper);
+  }
+  #screen-session.active { display: block; }
+
+  .session-header {
+    background: var(--bg-dark);
+    border-bottom: 1px solid rgba(201,169,110,0.15);
+    padding: 1.5rem 3rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .session-breadcrumb {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.7rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+  .session-breadcrumb span { color: var(--accent); }
+  .session-breadcrumb .sep { opacity: 0.3; }
+
+  .session-content {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 4rem 3rem;
+  }
+
+  .session-tag {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.7rem;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+  .session-tag::before {
+    content: '';
+    width: 30px; height: 1px;
+    background: var(--accent);
+  }
+
+  .session-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    font-weight: 300;
+    line-height: 1.1;
+    color: var(--text-light);
+    margin-bottom: 2rem;
+  }
+
+  .session-meta-row {
+    display: flex;
+    gap: 2rem;
+    margin-bottom: 3rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid rgba(201,169,110,0.1);
+    flex-wrap: wrap;
+  }
+  .meta-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+  .meta-label {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.6rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--accent);
+    opacity: 0.7;
+  }
+  .meta-value {
+    font-family: 'Barlow', sans-serif;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+  }
+
+  .session-placeholder {
+    background: rgba(27,77,92,0.2);
+    border: 1px dashed rgba(201,169,110,0.2);
+    padding: 4rem;
+    text-align: center;
+    border-radius: 2px;
+  }
+  .session-placeholder p {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.3rem;
+    font-style: italic;
+    color: var(--text-muted);
+    opacity: 0.6;
+  }
+  .session-placeholder small {
+    display: block;
+    margin-top: 0.75rem;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    opacity: 0.4;
+  }
+
+  /* ─── INFO STRIP ─── */
+  .info-strip {
+    background: rgba(27,77,92,0.3);
+    border-top: 1px solid rgba(201,169,110,0.1);
+    border-bottom: 1px solid rgba(201,169,110,0.1);
+    padding: 1.5rem 3rem;
+    display: flex;
+    justify-content: center;
+    gap: 4rem;
+    flex-wrap: wrap;
+    margin-top: 1rem;
+  }
+  .info-item {
+    text-align: center;
+  }
+  .info-label {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.6rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--accent);
+    opacity: 0.7;
+    display: block;
+    margin-bottom: 0.25rem;
+  }
+  .info-value {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.1rem;
+    color: var(--text-light);
+  }
+
+  /* ─── SESSION CONTENT COMPONENTS ─── */
+
+  .session-description {
+    font-family: 'Barlow', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 300;
+    line-height: 1.8;
+    color: var(--text-muted);
+    margin-bottom: 2.5rem;
+    border-left: 2px solid rgba(201,169,110,0.25);
+    padding-left: 1.5rem;
+  }
+
+  .session-objectives {
+    margin-bottom: 2.5rem;
+  }
+  .session-objectives h4 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 1rem;
+  }
+  .objective-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+  .objective-list li {
+    font-family: 'Barlow', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 300;
+    color: var(--text-muted);
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+  .objective-list li::before {
+    content: '→';
+    color: var(--accent);
+    opacity: 0.6;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  .activity-block {
+    background: rgba(27,77,92,0.2);
+    border: 1px solid rgba(201,169,110,0.15);
+    padding: 2rem;
+    margin-bottom: 1.5rem;
+    position: relative;
+  }
+  .activity-block-label {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.6rem;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .activity-block-label::before {
+    content: '';
+    width: 20px; height: 1px;
+    background: var(--accent);
+    opacity: 0.5;
+  }
+  .activity-block h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.4rem;
+    font-weight: 400;
+    color: var(--text-light);
+    margin-bottom: 0.75rem;
+  }
+  .activity-block p {
+    font-family: 'Barlow', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 300;
+    line-height: 1.7;
+    color: var(--text-muted);
+  }
+
+  /* Interactive: Timer */
+  .timer-widget {
+    background: rgba(15,45,56,0.8);
+    border: 1px solid rgba(201,169,110,0.2);
+    padding: 1.5rem 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+  .timer-display {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 3rem;
+    font-weight: 300;
+    color: var(--accent);
+    letter-spacing: 0.05em;
+    line-height: 1;
+  }
+  .timer-label {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-top: 0.25rem;
+  }
+  .timer-controls { display: flex; gap: 0.75rem; flex-wrap: wrap; }
+  .btn-primary {
+    padding: 0.6rem 1.5rem;
+    background: var(--accent);
+    color: var(--bg-deeper);
+    border: none;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    cursor: none;
+    transition: all 0.3s;
+  }
+  .btn-primary:hover { background: #d4b47a; }
+  .btn-secondary {
+    padding: 0.6rem 1.5rem;
+    background: transparent;
+    color: var(--text-muted);
+    border: 1px solid rgba(138,170,181,0.3);
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    cursor: none;
+    transition: all 0.3s;
+  }
+  .btn-secondary:hover { border-color: var(--accent); color: var(--accent); }
+
+  /* Interactive: Name game bingo */
+  .bingo-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.5rem;
+    margin: 1.5rem 0;
+  }
+  .bingo-cell {
+    background: rgba(27,77,92,0.3);
+    border: 1px solid rgba(201,169,110,0.15);
+    padding: 0.75rem 0.5rem;
+    text-align: center;
+    cursor: none;
+    transition: all 0.3s;
+    min-height: 70px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.3rem;
+  }
+  .bingo-cell:hover { border-color: rgba(201,169,110,0.4); background: rgba(27,77,92,0.5); }
+  .bingo-cell.found {
+    background: rgba(74,124,111,0.3);
+    border-color: rgba(74,124,111,0.6);
+  }
+  .bingo-cell.found .bingo-prompt { color: var(--secondary); }
+  .bingo-prompt {
+    font-family: 'Barlow', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 400;
+    color: var(--text-muted);
+    line-height: 1.3;
+  }
+  .bingo-name {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+    color: var(--accent);
+    font-style: italic;
+    min-height: 1rem;
+  }
+  .bingo-counter {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2rem;
+    font-weight: 300;
+    color: var(--accent);
+  }
+
+  /* Step flow */
+  .step-flow {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    margin: 1.5rem 0;
+  }
+  .step-item {
+    display: flex;
+    gap: 1.5rem;
+    align-items: flex-start;
+    position: relative;
+  }
+  .step-item:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    left: 16px;
+    top: 36px;
+    width: 1px;
+    height: calc(100% + 0px);
+    background: rgba(201,169,110,0.15);
+  }
+  .step-num {
+    width: 32px; height: 32px;
+    border: 1px solid rgba(201,169,110,0.3);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.7rem;
+    color: var(--accent);
+    flex-shrink: 0;
+    background: var(--bg-deeper);
+    position: relative;
+    z-index: 1;
+  }
+  .step-body {
+    padding-bottom: 1.75rem;
+    flex: 1;
+  }
+  .step-body strong {
+    display: block;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-light);
+    margin-bottom: 0.3rem;
+  }
+  .step-body span {
+    font-family: 'Barlow', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 300;
+    color: var(--text-muted);
+    line-height: 1.6;
+  }
+  .step-time {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+    color: var(--accent);
+    opacity: 0.6;
+    margin-top: 0.25rem;
+    display: block;
+  }
+
+  /* Facilitator note */
+  .facilitator-note {
+    background: rgba(201,169,110,0.06);
+    border: 1px solid rgba(201,169,110,0.2);
+    border-left: 3px solid var(--accent);
+    padding: 1.25rem 1.5rem;
+    margin-top: 2rem;
+  }
+  .facilitator-note-label {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.6rem;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 0.5rem;
+  }
+  .facilitator-note p {
+    font-family: 'Barlow', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 300;
+    line-height: 1.6;
+    color: var(--text-muted);
+  }
+
+  /* Placeholder for upcoming sessions */
+  .session-placeholder {
+    background: rgba(27,77,92,0.15);
+    border: 1px dashed rgba(201,169,110,0.15);
+    padding: 4rem;
+    text-align: center;
+  }
+  .session-placeholder p {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.3rem;
+    font-style: italic;
+    color: var(--text-muted);
+    opacity: 0.5;
+  }
+  .session-placeholder small {
+    display: block;
+    margin-top: 0.75rem;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.6rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--accent);
+    opacity: 0.3;
+  }
+
+  /* Range input */
+  input[type=range] { -webkit-appearance: none; height: 3px; background: rgba(201,169,110,0.2); border-radius: 2px; outline: none; }
+  input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 14px; height: 14px; border-radius: 50%; background: var(--accent); cursor: pointer; }
+
+  /* Textarea & input focus */
+  textarea:focus, input[type=text]:focus, input:focus { border-color: rgba(201,169,110,0.35) !important; outline: none; }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: var(--bg-deeper); }
+  ::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 2px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+
+  /* Fade transition */
+  .fade-out { animation: fadeOut 0.4s ease forwards; }
+  .fade-in { animation: fadeIn 0.5s ease forwards; }
+  @keyframes fadeOut { to { opacity: 0; transform: translateY(-10px); } }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+  /* ─── RESPONSIVE ─── */
+  @media (max-width: 768px) {
+    .prog-header, .session-header { padding: 1rem 1.5rem; }
+    .days-grid { padding: 1.5rem; grid-template-columns: 1fr; }
+    .session-content { padding: 2rem 1.5rem; }
+    .info-strip { gap: 2rem; padding: 1.5rem; }
+    .countries-row { gap: 1.2rem; flex-wrap: wrap; }
+    .hero-title { font-size: clamp(4rem, 18vw, 7rem); }
+  }
+</style>
+</head>
+<body>
+
+<!-- Custom cursor -->
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- ═══════════════════════════════════════ -->
+<!-- SCREEN 1: FRONTPAGE                    -->
+<!-- ═══════════════════════════════════════ -->
+<div class="screen active" id="screen-home">
+  <div class="bg-gradient"></div>
+  <div class="lines">
+    <div class="line"></div>
+    <div class="line"></div>
+    <div class="line"></div>
+    <div class="line"></div>
+  </div>
+
+  <!-- Compass Rose SVG -->
+  <svg class="compass-bg" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="100" cy="100" r="98" stroke="white" stroke-width="0.5"/>
+    <circle cx="100" cy="100" r="80" stroke="white" stroke-width="0.3"/>
+    <circle cx="100" cy="100" r="60" stroke="white" stroke-width="0.3"/>
+    <circle cx="100" cy="100" r="40" stroke="white" stroke-width="0.3"/>
+    <circle cx="100" cy="100" r="20" stroke="white" stroke-width="0.5"/>
+    <line x1="100" y1="2" x2="100" y2="198" stroke="white" stroke-width="0.3"/>
+    <line x1="2" y1="100" x2="198" y2="100" stroke="white" stroke-width="0.3"/>
+    <line x1="15" y1="15" x2="185" y2="185" stroke="white" stroke-width="0.2"/>
+    <line x1="185" y1="15" x2="15" y2="185" stroke="white" stroke-width="0.2"/>
+    <!-- N arrow -->
+    <polygon points="100,5 95,30 100,25 105,30" fill="white" opacity="0.8"/>
+    <!-- S arrow -->
+    <polygon points="100,195 95,170 100,175 105,170" fill="white" opacity="0.4"/>
+    <!-- E arrow -->
+    <polygon points="195,100 170,95 175,100 170,105" fill="white" opacity="0.4"/>
+    <!-- W arrow -->
+    <polygon points="5,100 30,95 25,100 30,105" fill="white" opacity="0.4"/>
+    <!-- N label -->
+    <text x="97" y="18" fill="white" font-size="8" font-family="serif" opacity="0.9">N</text>
+    <!-- Cardinal marks -->
+    <line x1="100" y1="80" x2="100" y2="20" stroke="white" stroke-width="1" opacity="0.6"/>
+  </svg>
+
+  <div class="hero-content">
+    <div class="hero-eyebrow">Erasmus+ Youth Exchange · Istanbul, Türkiye · June 2026</div>
+
+    <h1 class="hero-title">
+      N.O.R.T.H.
+      <span>Navigating Our Resources Towards Harmony</span>
+    </h1>
+
+    <div class="hero-divider"></div>
+
+    <div class="hero-subtitle">1 – 9 June 2026 · Istanbul</div>
+    <div class="hero-meta">Türkiye · Spain · North Macedonia · Serbia</div>
+
+    <div class="countries-row">
+      <div class="country-tag">🇹🇷 Türkiye</div>
+      <div class="country-tag">🇪🇸 Spain</div>
+      <div class="country-tag">🇲🇰 North Macedonia</div>
+      <div class="country-tag">🇷🇸 Serbia</div>
+    </div>
+
+    <button class="enter-btn" onclick="showScreen('programme')">
+      Enter Programme
+      <span>→</span>
+    </button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════ -->
+<!-- SCREEN 2: PROGRAMME OVERVIEW           -->
+<!-- ═══════════════════════════════════════ -->
+<div class="screen" id="screen-programme">
+  <div class="prog-header">
+    <div class="prog-logo">N.O.R.T.H. <em>Istanbul 2026</em></div>
+    <button class="back-btn" onclick="showScreen('home')">Back to Home</button>
+  </div>
+
+  <div class="prog-hero">
+    <h2>Activity Programme</h2>
+    <p>Select a day to explore its sessions</p>
+  </div>
+
+  <div class="info-strip">
+    <div class="info-item">
+      <span class="info-label">Duration</span>
+      <span class="info-value">9 Days</span>
+    </div>
+    <div class="info-item">
+      <span class="info-label">Participants</span>
+      <span class="info-value">32</span>
+    </div>
+    <div class="info-item">
+      <span class="info-label">Countries</span>
+      <span class="info-value">4</span>
+    </div>
+    <div class="info-item">
+      <span class="info-label">Outputs</span>
+      <span class="info-value">Green Map · Escape Room</span>
+    </div>
+    <div class="info-item">
+      <span class="info-label">Programme Type</span>
+      <span class="info-value">Erasmus+ KA1 Youth Exchange</span>
+    </div>
+  </div>
+
+  <div class="days-grid" id="daysGrid">
+    <!-- Generated by JS -->
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════ -->
+<!-- SCREEN 3: SESSION VIEW                 -->
+<!-- ═══════════════════════════════════════ -->
+<div class="screen" id="screen-session">
+  <div class="session-header">
+    <div class="session-breadcrumb">
+      <button class="back-btn" onclick="showScreen('programme')" style="color:var(--text-muted)">← Programme</button>
+      <span class="sep">·</span>
+      <span id="session-day-label">Day 1</span>
+      <span class="sep">·</span>
+      <span id="session-slot-label" style="color:var(--accent)">Morning</span>
+    </div>
+    <div class="prog-logo" style="font-size:1.2rem">N.O.R.T.H.</div>
+  </div>
+
+  <div class="session-content">
+    <div class="session-tag" id="session-tag">Day 1 · Morning Session</div>
+    <h2 class="session-title" id="session-title">Session Title</h2>
+
+    <div class="session-meta-row">
+      <div class="meta-item">
+        <span class="meta-label">Duration</span>
+        <span class="meta-value" id="session-duration">90 min</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Method</span>
+        <span class="meta-value" id="session-method">—</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Tools</span>
+        <span class="meta-value" id="session-tools">—</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Group</span>
+        <span class="meta-value" id="session-group">Full group (32)</span>
+      </div>
+    </div>
+
+    <!-- Dynamic session body -->
+    <div id="session-body"></div>
+  </div>
+</div>
+
+<script>
+// ─── IN-MEMORY STORE (replaces localStorage for artifact compatibility) ──────
+window.__northStore = {};
+function storeGet(key) { return window.__northStore[key] || null; }
+function storeSet(key, val) { window.__northStore[key] = val; }
+function storeDel(key) { delete window.__northStore[key]; }
+
+// ─── SESSION CONTENT LIBRARY ────────────────────────────
+// Each session has: description, objectives[], steps[], activities[], facilitatorNote
+// 'html' key renders raw interactive HTML inside the session body
+
+const sessionContent = {
+
+  '1-AM': {
+    description: `Day 1 is about landing safely. Participants arrive from four different countries after long journeys — the priority is making everyone feel welcomed, oriented, and at ease before any programme content begins. This slot is purely logistical and relational.`,
+    objectives: [
+      'Ensure all participants arrive and are checked in without stress',
+      'Distribute all practical information (rooms, schedule, meals, house rules)',
+      'Create a first sense of safety and belonging within the group',
+    ],
+    steps: [
+      { time: '10 min', title: 'Airport / transfer coordination', body: 'Facilitators coordinate arrivals in shifts. WhatsApp group already active for real-time updates.' },
+      { time: '20 min', title: 'Check-in & room assignment', body: 'Participants receive room keys, welcome pack, and printed daily schedule. Mixed-nationality rooms encouraged.' },
+      { time: '20 min', title: 'Venue tour', body: 'Short walk around the venue — dining area, meeting room, garden, bathrooms, emergency exits.' },
+      { time: '20 min', title: 'Practical briefing', body: 'Meal times, curfew, wifi, emergency contacts, house rules. Keep it short and visual — use the printed one-pager.' },
+      { time: '20 min', title: 'Free time before dinner', body: 'Participants settle in, unpack, rest. No structured activity — first informal conversations happen naturally.' },
+    ],
+    facilitatorNote: `Don't rush this slot. The quality of arrival sets the emotional tone for the entire exchange. If some groups are delayed, adapt — never start a formal session with half the group missing.`,
+    interactive: null,
+  },
+
+  '1-PM': {
+    description: `The first real programme session. At this point participants have eaten together and had time to settle — now we break the ice properly. The goal is simple: learn each other's names, laugh together, and begin to feel like a group rather than four separate national delegations.`,
+    objectives: [
+      'Learn the names of all 32 participants through active play',
+      'Break national clusters and create first cross-cultural connections',
+      'Establish a light, playful group energy that will carry into Day 2',
+      'Generate the first shared memory of the exchange',
+    ],
+    steps: [
+      { time: '10 min', title: 'Circle of names', body: 'Standing in a circle: each person says their name + one gesture. The group repeats both. Three rounds, increasing speed.' },
+      { time: '25 min', title: 'Human Bingo', body: 'Each participant gets a bingo card with prompts ("find someone who has never seen snow", "find someone who speaks 3 languages"...). First to complete a row wins — but everyone keeps going until time is up. Use the interactive bingo below.' },
+      { time: '20 min', title: 'Name & superpower', body: 'In groups of 6 (mixed nationality): each person introduces themselves with their name + one green superpower they wish they had. Groups then present the most interesting superpowers to the room.' },
+      { time: '15 min', title: 'The name web', body: 'Standing in a circle with a ball of wool. Each person says a name they remember, throws the wool to that person — keeping hold of their thread. The result is a web connecting the whole group.' },
+      { time: '10 min', title: 'Closing reflection', body: 'Brief facilitated debrief: "One name you\'ll definitely remember tomorrow, and why." Then announce tomorrow\'s theme.' },
+    ],
+    facilitatorNote: `Energy is everything in this session. Move fast between activities, keep music playing between rounds. If the group is shy, model the energy yourself — be the first to do something ridiculous. Mixed-nationality groupings are non-negotiable from the very first moment.`,
+    interactive: 'bingo',
+  },
+
+  // ── DAY 2 ─────────────────────────────────────────────
+
+  '2-AM': {
+    description: `Day 2 morning is about transforming 32 individuals into one functioning group. Before any content can land, participants need to trust each other and agree on how they want to work together. This session combines physical team-building with a collaborative process to co-create the group's shared agreements.`,
+    objectives: [
+      'Build physical trust and nonverbal communication within mixed-nationality teams',
+      'Identify shared values and working principles across four different cultures',
+      'Co-create a Group Agreement that all participants genuinely own',
+      'Form the four working teams that will collaborate throughout the exchange',
+    ],
+    steps: [
+      { time: '20 min', title: 'Blind Architect', body: 'Groups of 8 (2 per country). One person sees a simple structure built from objects; they must describe it to their blindfolded teammates using only words — no gestures. Teams recreate the structure. Debrief: what made communication work or fail?' },
+      { time: '20 min', title: 'Values Marketplace', body: 'Cards with values are spread on the floor (respect, honesty, fun, punctuality, creativity, inclusion, courage...). Each participant picks their top 3. In mixed groups they negotiate down to 5 shared values. Groups present to the room. Facilitator collects the consensus.' },
+      { time: '25 min', title: 'Group Agreement Canvas', body: 'Using the interactive canvas below, the group builds their agreements together: How do we communicate? How do we handle conflict? What do we expect from each other? What are our non-negotiables? Each section is filled collaboratively on screen.' },
+      { time: '10 min', title: 'Signing the Agreement', body: 'The final agreement is displayed. Each participant "signs" with their name or emoji. It stays visible throughout the exchange — projected during daily evaluations.' },
+      { time: '15 min', title: 'Team formation', body: 'Facilitator introduces the 4 working teams (mixed nationality) that will be used for output work from Day 6 onward. Teams choose a name related to nature or sustainability.' },
+    ],
+    facilitatorNote: `The Group Agreement is not a formality — it is a genuine social contract. Invest time in making it real. If participants rush through it, slow them down: ask "do you really mean this?" and "what would this look like in practice?" The agreement will be your best tool for managing conflict later.`,
+    interactive: 'agreement',
+  },
+
+  '2-PM': {
+    description: `The first content session of the exchange. Before diving into green habits and sustainable lifestyles, we need to understand where participants actually stand: what do they know, what do they think they know, and what are the gaps? This session is diagnostic and provocative — designed to spark curiosity, not to lecture.`,
+    objectives: [
+      'Assess the group\'s baseline knowledge of environmental issues and sustainability',
+      'Challenge assumptions and common misconceptions about green living',
+      'Create a shared vocabulary for the rest of the exchange',
+      'Inspire curiosity and personal connection to the topic',
+    ],
+    steps: [
+      { time: '15 min', title: 'Four Corners — Where do you stand?', body: 'Statements are read aloud ("Recycling is enough to save the planet", "Individual actions don\'t matter", "Technology will solve climate change"...). Participants move to corners: Strongly Agree / Agree / Disagree / Strongly Disagree. Brief discussion at each corner. No right answers yet — just positions.' },
+      { time: '30 min', title: 'Sustainability Quiz', body: 'Teams compete on the interactive quiz below — 15 questions across categories: climate facts, local green heroes, eco-myths, Istanbul & Turkey, global stats. Fast-paced, scored in real time.' },
+      { time: '25 min', title: 'Myth Busters', body: 'Each team receives 3 "green myths" (e.g. "Electric cars are always eco-friendly", "Paper bags are better than plastic"). They have 10 minutes to discuss and build their argument. Then each team presents — facilitator reveals the nuanced truth after each one.' },
+      { time: '10 min', title: 'Personal connection', body: 'Silent reflection: each participant writes on a sticky note (physical or Padlet) one environmental issue they feel personally connected to and one they know nothing about. Posted on the "Our Map of Ignorance & Passion" wall — visible all week.' },
+    ],
+    facilitatorNote: `Avoid presenting yourself as the expert. Your role here is to generate productive confusion — to make participants aware of what they don't know without making them feel stupid. Celebrate wrong answers as much as right ones. The goal is curiosity, not correctness.`,
+    interactive: 'quiz',
+  },
+
+  // ── DAY 3 ─────────────────────────────────────────────
+
+  '3-AM': {
+    description: `We now zoom in from global awareness to personal lifestyle. This session makes sustainability tangible and individual: each participant calculates their own carbon footprint and compares it with others across different countries and contexts. The result is always surprising — and always deeply personal.`,
+    objectives: [
+      'Understand the concept of carbon footprint at a personal and national level',
+      'Identify which daily habits have the highest environmental impact',
+      'Generate honest self-reflection without guilt or judgment',
+      'Compare lifestyle patterns across four different European countries',
+    ],
+    steps: [
+      { time: '10 min', title: 'What is a carbon footprint?', body: 'Short facilitated intro — not a lecture. Ask the group first: "What do you think contributes most to your personal footprint?" Collect answers, then reveal the actual top categories: diet, transport, home energy, consumption.' },
+      { time: '35 min', title: 'Personal Carbon Calculator', body: 'Each participant uses the interactive calculator below to estimate their annual CO₂ footprint. Inputs: diet type, transport habits, flights, home heating, shopping frequency. The tool gives a result in tonnes/year and compares it to the EU average (8.4t) and the Paris Agreement target (2.5t).' },
+      { time: '25 min', title: 'Country Comparison', body: 'Teams share their results anonymously. Facilitator aggregates on screen: What is the average for each country group? Where are the biggest differences? What surprises people most? Discussion: Is a high footprint always a personal choice, or is it structural?' },
+      { time: '10 min', title: 'One thing I can change', body: 'Each participant identifies the single highest-impact change they could realistically make. Written privately — no pressure to share. This feeds into Day 4\'s Green Habits session.' },
+    ],
+    facilitatorNote: `This session can trigger defensiveness or guilt — especially among participants from countries with higher average footprints. Frame everything structurally: individual choices are shaped by infrastructure, income, culture, and policy. The goal is awareness and agency, not shame.`,
+    interactive: 'carbon',
+  },
+
+  '3-PM': {
+    description: `From awareness to action. This session explores what sustainable daily life actually looks like across four different countries — not as a lecture, but as an exchange of real habits, traditions, and practices. Participants discover that "green living" looks very different depending on where you are, and that every culture has something to teach and something to learn.`,
+    objectives: [
+      'Discover practical green habits that are already present in participants\' lives',
+      'Exchange sustainable practices across four different cultural contexts',
+      'Distinguish between habits that are conscious choices and those that are structural',
+      'Build a shared bank of actionable green ideas for the output phase',
+    ],
+    steps: [
+      { time: '10 min', title: 'The Green Habit Spectrum', body: 'Facilitator introduces a spectrum on the floor: "Individual choice" on one end, "Structural/cultural" on the other. Examples are placed: composting (choice?), using trains instead of planes (depends on infrastructure?), eating seasonal food (culture?). Brief discussion.' },
+      { time: '30 min', title: 'Green Habits Exchange Market', body: 'Each national team prepares a 5-minute "market stall" presenting 3-5 green habits from their country — some traditional, some modern, some surprising. Other teams visit each stall and collect the best ideas on their "shopping list" card.' },
+      { time: '20 min', title: 'Scenario Challenge', body: 'Use the interactive scenario tool below. Five everyday situations are presented (e.g. "You need to travel 200km for work — what do you do?"). Each participant makes their choice; results are shown as a group distribution. Discussion: why did people choose differently?' },
+      { time: '20 min', title: 'My Green Week', body: 'Each participant sketches a "green version" of one typical day in their life back home — what would they change? Shared in pairs, then key ideas collected on the group board. This material feeds directly into the Green Map output.' },
+    ],
+    facilitatorNote: `The "market stall" format tends to produce lively, surprising conversations — Turkish participants often share habits around food waste and water use that Northern/Western European participants have never considered, and vice versa. Let these discoveries breathe. Don't rush to the next activity.`,
+    interactive: 'scenario',
+  },
+
+  // ── DAY 4 ─────────────────────────────────────────────
+
+  '4-AM': {
+    description: `Hands on the table — literally. This session gets physical: participants work with materials (collected in advance) to create something new from something discarded. Creative recycling is both a practical skill and a mindset shift. The session also produces real documented outputs that feed into the Green Map.`,
+    objectives: [
+      'Experience creative recycling as a hands-on, collaborative practice',
+      'Develop innovative thinking about waste and material value',
+      'Produce documented upcycling ideas that can be replicated at home',
+      'Practice working as mixed-nationality teams under time pressure',
+    ],
+    steps: [
+      { time: '10 min', title: 'What is upcycling vs recycling?', body: 'Quick distinction: recycling breaks material down; upcycling adds value. Show 3-4 real examples from each country (participants were asked to bring one example from home — a photo or small object). Brief sharing round.' },
+      { time: '10 min', title: 'Materials reveal', body: 'Each table has a box of "waste" materials: glass jars, cardboard, fabric scraps, bottle caps, old newspapers, plastic bags, wire, corks. Teams have 2 minutes to explore — no instructions yet.' },
+      { time: '40 min', title: 'Build something useful', body: 'Challenge: each team must create one object that solves a real everyday problem — using only the materials in their box plus scissors and glue. The object must have a name, a function, and a 30-second pitch. Timer visible on screen.' },
+      { time: '20 min', title: 'Gallery & documentation', body: 'Objects are displayed. Each team photographs their creation, writes a description (name, materials, function, replicability at home). These entries are uploaded to the interactive gallery below — which will be embedded in the Green Map output.' },
+      { time: '10 min', title: 'Debrief', body: 'What was the hardest part? What surprised you? Would you actually make this at home? What would you need? Key insight to draw out: constraints breed creativity.' },
+    ],
+    facilitatorNote: `Prepare the materials boxes in advance — variety matters more than quantity. Include at least one unusual material per box (a CD, a broken umbrella, a single shoe). Teams who struggle most at the start often produce the most creative results. Resist the urge to help. Let them be stuck for a while.`,
+    interactive: 'gallery',
+  },
+
+  '4-PM': {
+    description: `This session zooms out from individual habits to systemic thinking: what does a low-carbon lifestyle actually require at a societal level? Participants compare the carbon cost of everyday choices across their four countries — transport, diet, energy, consumption — and begin to understand both individual agency and structural constraints.`,
+    objectives: [
+      'Understand the carbon cost of common lifestyle choices with real data',
+      'Compare low-carbon options available in different countries and contexts',
+      'Distinguish between individual responsibility and systemic enablers',
+      'Identify the highest-leverage changes for each country context',
+    ],
+    steps: [
+      { time: '15 min', title: 'Carbon cost cards', body: 'Each team receives a set of cards showing the CO₂ cost of 20 everyday actions (e.g. one flight BRU–IST: 0.25t; one year of vegetarianism: saves 0.5t; buying one new smartphone: 0.07t). Teams rank them from highest to lowest impact. Results compared across teams.' },
+      { time: '25 min', title: 'Country Infrastructure Audit', body: 'Each national team assesses: How easy is it to live low-carbon in your country? They fill in the interactive matrix below across 5 dimensions: public transport, renewable energy, plant-based food access, recycling infrastructure, cycling infrastructure. Scored 1-5. Results visualised and compared.' },
+      { time: '25 min', title: 'The Low-Carbon Day', body: 'Challenge: design a realistic low-carbon Monday for someone living in your country. What do they eat, how do they travel, what do they buy, what do they do for fun? Presented as a short comic strip / storyboard (drawn or described). Shared with the group.' },
+      { time: '15 min', title: 'Policy wishlist', body: 'If you could change ONE structural thing in your country to make low-carbon living easier, what would it be? Each participant writes on a card. Collected and grouped by theme — this feeds into the dissemination session on Day 8.' },
+    ],
+    facilitatorNote: `This session can become political — that's fine and even desirable. But keep the tone constructive: "what would need to change" rather than "who is to blame". The policy wishlist is particularly powerful when participants from different countries realise they share the same frustrations.`,
+    interactive: 'matrix',
+  },
+
+  // ── DAY 5 ─────────────────────────────────────────────
+
+  '5-AM': {
+    description: `A morning outside the venue for a guided institutional visit to a sustainability-focused organisation in Istanbul. This gives participants a real-world, local perspective on environmental action — connecting the exchange's themes to concrete, ongoing work in the host city.`,
+    objectives: [
+      'Discover how sustainability is being addressed institutionally in Istanbul',
+      'Connect global environmental themes to local Turkish realities',
+      'Practice structured observation and critical questioning',
+      'Gather inspiration and material for the Green Map output',
+    ],
+    steps: [
+      { time: '10 min', title: 'Pre-visit briefing', body: 'Facilitator introduces the hosting organisation. Each team receives a specific observation focus: Team 1 — community engagement; Team 2 — practical green initiatives; Team 3 — challenges and barriers; Team 4 — what could be replicated in other countries.' },
+      { time: '60 min', title: 'Guided visit', body: 'Tour of the facility with a local representative. Participants use the observation sheet below to take structured notes. Each team prepares 2 questions based on their focus area.' },
+      { time: '20 min', title: 'Q&A with the host', body: 'Structured Q&A — each team asks their prepared questions. Facilitator ensures all voices are heard, not just the confident speakers.' },
+      { time: '20 min', title: 'Debrief walk back', body: 'Walking back to the venue, teams discuss: What surprised you? What would work in your country? What wouldn\'t? What will you add to the Green Map from today? Notes captured on the observation sheet.' },
+    ],
+    facilitatorNote: `Coordinate the visit logistics at least 2 weeks in advance. Confirm the host has experience with international youth groups. Brief them to avoid overly formal presentations — the most valuable moments are always the informal exchanges and the questions participants ask spontaneously.`,
+    interactive: 'observation',
+  },
+
+  '5-PM': {
+    description: `A free afternoon to explore Istanbul — guided by a curated green lens. Participants receive a suggested route connecting sustainability-relevant spots in the city: markets, parks, community gardens, mosques with water conservation systems, street food vendors using local produce. No formal structure — just curiosity and discovery.`,
+    objectives: [
+      'Experience Istanbul as a living, breathing sustainability case study',
+      'Build cultural connection with the host city beyond the venue',
+      'Rest and recharge after four intense programme days',
+      'Gather material for the Green Map (local spots, practices, stories)',
+    ],
+    steps: [
+      { time: '15 min', title: 'Istanbul Green Explorer briefing', body: 'Facilitator presents the suggested route using the interactive Istanbul map below. Each participant chooses at least 2 "green stops" to visit. They\'re encouraged to document what they find (photos, notes) for the Green Map.' },
+      { time: '180 min', title: 'Free exploration', body: 'Participants explore in self-organised small groups. No facilitator presence — genuine free time. WhatsApp group active for coordination and sharing discoveries in real time.' },
+      { time: '15 min', title: 'Optional: evening sharing', body: 'At dinner, a voluntary round: "One thing I found in Istanbul today that belongs on our Green Map." No pressure — just a door left open.' },
+    ],
+    facilitatorNote: `Prepare the map in advance with verified locations — check opening hours, especially for community gardens which may require appointment. Include a mix of well-known spots (Grand Bazaar spice section, Princes\' Islands) and hidden gems. The goal is discovery, not tourism.`,
+    interactive: 'istanbul-map',
+  },
+
+  // ── DAY 6 ─────────────────────────────────────────────
+
+  '6-AM': {
+    description: `Micro-green solutions are small-scale, accessible environmental interventions that individuals or small communities can implement without institutional support. This session introduces the concept through real examples from the four partner countries, then challenges teams to design their own. It is the first session explicitly building toward the project's outputs.`,
+    objectives: [
+      'Understand the concept and potential of micro-scale green solutions',
+      'Analyse real examples from Turkey, Spain, North Macedonia and Serbia',
+      'Apply design thinking to develop original, context-specific solutions',
+      'Produce solution concepts that will feed into the Green Map and Escape Room',
+    ],
+    steps: [
+      { time: '15 min', title: 'What is a micro-green solution?', body: 'Definition and 6 real examples: community seed library (Serbia), rooftop herb garden (Istanbul), repair café (Spain), rainwater collection system (North Macedonia), food waste composting collective (Turkey), neighbourhood clothing swap (Spain). Each example shown with photo, cost, and impact.' },
+      { time: '10 min', title: 'Design Thinking intro', body: 'Lightning intro to the 5 stages: Empathise → Define → Ideate → Prototype → Test. We\'ll use a compressed version: today we focus on Empathise + Define + Ideate.' },
+      { time: '35 min', title: 'Solution Sprint', body: 'Teams use the interactive Design Thinking canvas below. Each team picks ONE problem from their country context (identified in Day 3-4 sessions). They empathise (who is affected?), define (what is the core problem?), and generate at least 5 solution ideas in rapid succession — no judging, quantity over quality.' },
+      { time: '20 min', title: 'Pitch & feedback', body: 'Each team presents their top idea in 90 seconds. Other teams give feedback using the "2 stars and a wish" format (2 things they like, 1 suggestion). Facilitator captures the best ideas — these become candidate entries for the Green Map.' },
+    ],
+    facilitatorNote: `The Design Thinking canvas works best when teams fight the urge to evaluate ideas too early. If you hear "that won't work" before the ideation phase is over, stop the group and remind them: quantity first, quality later. The worst ideas sometimes contain the seed of the best ones.`,
+    interactive: 'design-canvas',
+  },
+
+  '6-PM': {
+    description: `The first dedicated output-building session. Teams begin populating the N.O.R.T.H. Green Map — the project's main output — using greenmap.org. Each national team is responsible for their country's entries, drawing on material gathered throughout the week. This session is practical, collaborative, and directly produces content that will live beyond the exchange.`,
+    objectives: [
+      'Understand the Green Map System platform and its global context',
+      'Curate and structure green practice entries for each partner country',
+      'Begin populating the official N.O.R.T.H. map on greenmap.org',
+      'Establish quality standards for map entries across all teams',
+    ],
+    steps: [
+      { time: '15 min', title: 'Green Map System briefing', body: 'Facilitator walks through greenmap.org: what it is, the 475 existing maps, the icon system, how entries work. Shows a strong example map for inspiration. Presents the goal: to create a map good enough to become the 476th official Green Map in the world.' },
+      { time: '10 min', title: 'Entry quality standards', body: 'Together, the group defines what makes a strong map entry: clear location, photo, description, why it matters, who can visit/engage. A template is agreed and pinned on screen for reference.' },
+      { time: '40 min', title: 'Mapping sprint', body: 'Teams use the preparation sheet below to structure their entries before entering them on the live platform. Each team targets a minimum of 5 entries from their country, covering different categories: places, initiatives, practices, people, events.' },
+      { time: '15 min', title: 'Peer review round', body: 'Teams swap preparation sheets and give feedback: Is the entry clear? Is it interesting to someone from another country? Is the location accurate? Would you add it to your own map?' },
+    ],
+    facilitatorNote: `Create the greenmap.org account and project space before Day 6 — don't do it live in front of the group. Test the entry process with a dummy entry. Prepare a shared folder where teams can upload photos taken during the week. The biggest risk in this session is technical friction killing momentum — pre-solve every technical issue.`,
+    interactive: 'map-prep',
+  },
+
+  // ── DAY 7 ─────────────────────────────────────────────
+
+  '7-AM': {
+    description: `The most creative session of the exchange. Teams co-design the Digital Escape Room — the project's secondary output — built around the sustainability theme and structured as four "rooms," one per country. Each room contains a narrative, an enigma rooted in a local green practice, and a solution that unlocks the next room. The result is a reusable educational tool for schools and youth centres.`,
+    objectives: [
+      'Understand the structure and logic of a digital escape room',
+      'Co-design a country-specific room with narrative, enigma, and solution',
+      'Connect local green practices to engaging interactive content',
+      'Produce room design documents ready for Genially implementation',
+    ],
+    steps: [
+      { time: '15 min', title: 'Escape Room anatomy', body: 'Facilitator walks through the structure using the interactive explainer below: setting/narrative → clue/challenge → solution → unlock. Shows a 2-minute demo of an existing Genially escape room. Key principle: the enigma must teach something real about sustainability.' },
+      { time: '10 min', title: 'The NORTH Escape Room concept', body: 'Group agrees on the overarching narrative: "You are an environmental detective crossing Europe on a mission to stop a corporation from burying toxic waste in four countries. Each country holds a clue." Brief, dramatic, motivating.' },
+      { time: '45 min', title: 'Room design sprint', body: 'Each national team designs their room using the interactive template below. They must define: setting (where in their country?), narrative hook (what is the environmental threat?), the enigma (puzzle, riddle, or quiz based on a real green fact from their country), the solution and unlock mechanism, and one visual element (described — drawn by hand or found online).' },
+      { time: '10 min', title: 'Room previews', body: 'Each team presents their room concept in 2 minutes. Group votes on one element they love and one suggestion for improvement. Facilitator notes what needs to be built on Genially in the afternoon.' },
+    ],
+    facilitatorNote: `The narrative frame ("environmental detective") makes the design process much easier because it gives teams a consistent logic to work within. If a team is stuck, ask them: what real environmental story from your country could become a mystery? What does a detective need to discover? Real stories — a polluted river, a disappearing forest, a community garden — always produce better enigmas than invented ones.`,
+    interactive: 'room-design',
+  },
+
+  '7-PM': {
+    description: `Finalisation and quality check for both outputs. Teams complete their Green Map entries, refine their Escape Room designs, and conduct a structured peer review of each other's work before publication. This session transforms drafts into finished, publishable outputs.`,
+    objectives: [
+      'Complete all Green Map entries to publication standard',
+      'Finalise all four Escape Room room designs',
+      'Conduct meaningful peer review using agreed quality criteria',
+      'Prepare both outputs for official publication/submission',
+    ],
+    steps: [
+      { time: '10 min', title: 'Quality checklist briefing', body: 'Facilitator presents the two quality checklists (one for the Green Map, one for the Escape Room) using the interactive tool below. Teams understand exactly what "done" looks like before they start.' },
+      { time: '30 min', title: 'Finalisation sprint', body: 'Teams work on their outputs simultaneously: completing missing Green Map entries, polishing room design documents. Facilitator and group leaders circulate to support.' },
+      { time: '20 min', title: 'Cross-team peer review', body: 'Teams rotate: Team A reviews Team B\'s map entries + Team B reviews Team A\'s room design. Feedback is structured: "One thing that\'s strong / One thing that could be clearer / One question I have." Written on the checklist tool.' },
+      { time: '20 min', title: 'Final revisions & sign-off', body: 'Teams incorporate feedback and make final adjustments. Facilitator officially marks both outputs as "ready for publication." Group celebrates with a brief round: "One word for what we created this week."' },
+    ],
+    facilitatorNote: `Don't let the peer review become polite and superficial. Push teams to give honest, specific feedback — "this is great" is not useful. If teams are reluctant, model the kind of feedback you want: "I love the narrative but I don't understand how the enigma connects to the green fact. Can you explain the link?" The publication moment at the end should feel ceremonial — mark it.`,
+    interactive: 'checklist',
+  },
+
+  // ── DAY 8 ─────────────────────────────────────────────
+
+  '8-AM': {
+    description: `Creating something is not enough — it needs to reach people. This session equips each national team with a concrete, realistic dissemination plan: who they will share their outputs with, through which channels, by when, and with what message. It also addresses the bigger picture: how do we keep this network alive after Istanbul?`,
+    objectives: [
+      'Develop a concrete dissemination plan for each partner country',
+      'Identify target audiences and appropriate channels for each context',
+      'Craft key messages that make the outputs relevant to different audiences',
+      'Establish commitments for post-project follow-up and network maintenance',
+    ],
+    steps: [
+      { time: '10 min', title: 'Why dissemination fails', body: 'Honest conversation: most project outputs sit unseen on Erasmus+ Results Platform. Why? No clear audience, no follow-up plan, no champion. Today we make sure NORTH doesn\'t become another forgotten PDF.' },
+      { time: '35 min', title: 'Dissemination Canvas', body: 'Each team uses the interactive canvas below to plan their dissemination: Target audiences (schools? youth centres? NGOs? local government? social media?), Channels (Instagram, WhatsApp groups, physical events, email newsletters), Key messages per audience, Timeline (what will you do in the first week? first month? first year?), Who is responsible for each action.' },
+      { time: '25 min', title: 'Communication pack', body: 'Teams draft their core social media post about the project — the one they will publish the day after returning home. They also agree on shared hashtags, a common description of the project, and how to link back to the Green Map and Escape Room.' },
+      { time: '10 min', title: 'Network commitments', body: 'Each participant makes one specific, measurable commitment: "By [date], I will [action] to share [output] with [audience]." Written in the interactive tool — shared with the group and followed up by email in 30 days.' },
+    ],
+    facilitatorNote: `Make the dissemination canvas as concrete as possible. "Post on social media" is not a plan. "Post a reel on our organisation's Instagram on 15 June with the Green Map link, tagging the three local schools we work with" is a plan. Push every team toward this level of specificity.`,
+    interactive: 'dissemination',
+  },
+
+  '8-PM': {
+    description: `The final evening programme — a space for genuine connection, gratitude, and forward-looking energy. Not a formal ceremony but a human gathering: participants share what they are taking home, leave messages for each other, and celebrate what they built together. The legacy wall becomes a living document of the exchange.`,
+    objectives: [
+      'Create space for genuine emotional closure and gratitude',
+      'Celebrate the collective work and outputs of the exchange',
+      'Build a lasting digital memory of the group',
+      'Strengthen individual connections across the four countries',
+    ],
+    steps: [
+      { time: '20 min', title: 'The giving circle', body: 'Participants stand in a circle. Each person gives a genuine compliment or observation to ONE other person in the group — someone they connected with during the week. No repetitions. The rule: it must be specific, not generic ("you were fun" doesn\'t count — "the way you explained composting changed how I think about it" does).' },
+      { time: '30 min', title: 'Legacy Wall', body: 'Using the interactive wall below, each participant contributes: one memory from the week, one thing they learned, one green commitment they are taking home, and their contact. The wall is exported as a PDF and shared with all participants.' },
+      { time: '30 min', title: 'Farewell dinner & free connection', body: 'Dinner together, music, no structure. This is the most important part — don\'t programme it. Just protect the time and the space.' },
+      { time: '10 min', title: 'Tomorrow\'s logistics', body: 'Brief practical info about Day 9: timing, luggage, check-out, YouthPass session. Keep it short — don\'t kill the atmosphere.' },
+    ],
+    facilitatorNote: `The giving circle is one of the most powerful tools in a youth exchange — but only if you insist on specificity. The first few rounds will be generic; gently push back each time until the quality shifts. Once one person gives a truly specific, heartfelt compliment, the whole circle changes. That moment is worth waiting for.`,
+    interactive: 'legacy',
+  },
+
+  // ── DAY 9 ─────────────────────────────────────────────
+
+  '9-AM': {
+    description: `The final morning brings together three things: understanding Erasmus+ and what the YouthPass represents, completing the YouthPass competence self-assessment thoughtfully, and conducting the final programme evaluation. This session should feel like a meaningful closure — a conscious reflection on the journey, not a bureaucratic box-ticking exercise.`,
+    objectives: [
+      'Understand the Erasmus+ programme and YouthPass as tools for recognition',
+      'Complete the YouthPass self-assessment with honesty and depth',
+      'Evaluate the exchange programme critically and constructively',
+      'Identify personal learning outcomes and next steps',
+    ],
+    steps: [
+      { time: '20 min', title: 'What is Erasmus+ and YouthPass?', body: 'Interactive presentation: what Erasmus+ is, what KA1 Youth Exchange means, how YouthPass works, and — crucially — why the 8 Key Competences matter beyond this project. Participants see real examples of how former Erasmus+ participants have used their YouthPass in job applications and further education.' },
+      { time: '35 min', title: 'YouthPass Self-Assessment', body: 'Using the interactive guide below, each participant works through the 8 Key Competences and identifies which ones they developed during NORTH, and how. Guiding questions are provided for each competence to help participants find concrete evidence from their experience.' },
+      { time: '25 min', title: 'Final Programme Evaluation', body: 'Using the interactive evaluation tool below: participants rate each day and each session, identify their top 3 learning moments, give feedback on facilitation, venue, food, and logistics, and share one recommendation for future editions of NORTH. Results are aggregated in real time and shared on screen.' },
+      { time: '10 min', title: 'Personal letter', body: 'Each participant writes a short letter to themselves — to be opened in 6 months. What did I learn? What did I commit to? What do I hope I will have done by then? Letters are sealed in envelopes and sent by post to each participant\'s home address in October.' },
+    ],
+    facilitatorNote: `The YouthPass self-assessment is only meaningful if participants have enough time and guidance to be honest. Don't rush it. The 8 competences should feel like a genuine language for what they lived — not a form to fill. Read each competence aloud, give examples from specific sessions, and let participants recognise themselves in what they did.`,
+    interactive: 'youthpass',
+  },
+
+  '9-PM': {
+    description: `The YouthPass ceremony and departures. A brief, warm, dignified moment of recognition before participants head to the airport. Simple, human, memorable.`,
+    objectives: [
+      'Formally recognise each participant\'s learning journey',
+      'Create a lasting final memory of the exchange',
+      'Ensure smooth and stress-free departure logistics',
+    ],
+    steps: [
+      { time: '20 min', title: 'YouthPass Ceremony', body: 'Each participant receives their YouthPass certificate. Facilitators say one personal word for each participant as they collect it. Group photo. Brief closing words from group leaders.' },
+      { time: '10 min', title: 'Final group photo & goodbyes', body: 'Informal time for last hugs, photo exchanges, contact sharing. No rush.' },
+      { time: '—', title: 'Departures', body: 'Transfer to airport/station in coordinated groups. Facilitators available until the last participant departs.' },
+    ],
+    facilitatorNote: `Keep the ceremony short and personal — quality over length. The personal word for each participant (even just one sentence) makes all the difference. Prepare these in advance: you will not be in the right headspace to improvise on the last day.`,
+    interactive: null,
+  },
+
+};
+
+// ─── BINGO PROMPTS ──────────────────────────────────────
+const bingoPrompts = [
+  "Has never seen snow",
+  "Speaks 3+ languages",
+  "Is vegetarian or vegan",
+  "Uses public transport daily",
+  "Has a compost at home",
+  "Has planted a tree",
+  "Reuses shopping bags always",
+  "Has solar panels at home",
+  "Cycles to work or school",
+  "Has visited a national park",
+  "Avoids fast fashion",
+  "Grows their own food",
+  "Has a pet",
+  "Reads news in 2+ languages",
+  "Has lived abroad",
+  "Cooks traditional recipes",
+];
+
+// ─── DATA ───────────────────────────────────────────────
+const programme = [
+  {
+    day: 1,
+    date: 'Mon 1 June',
+    theme: 'Arrivals & Welcome',
+    sessions: [
+      { slot: 'AM', name: 'Arrivals & Orientation', duration: '—', method: 'Logistics', tools: '—' },
+      { slot: 'PM', name: 'Name Games & Icebreakers', duration: '90 min', method: 'Non-formal games', tools: 'Interactive HTML' },
+    ],
+    evening: '🌙 Free evening'
+  },
+  {
+    day: 2,
+    date: 'Tue 2 June',
+    theme: 'Getting to Know Each Other',
+    sessions: [
+      { slot: 'AM', name: 'Team Building & Group Agreements', duration: '90 min', method: 'Collaborative activities', tools: 'Interactive HTML · Padlet' },
+      { slot: 'PM', name: 'Environmental Awareness Workshop', duration: '90 min', method: 'Quiz · Drag & drop', tools: 'Interactive HTML · Kahoot' },
+    ],
+    evening: '🌙 Social Night'
+  },
+  {
+    day: 3,
+    date: 'Wed 3 June',
+    theme: 'What is Sustainability?',
+    sessions: [
+      { slot: 'AM', name: 'Sustainable Lifestyles — Where Are We Now?', duration: '90 min', method: 'Carbon footprint calculator', tools: 'Interactive HTML' },
+      { slot: 'PM', name: 'Green Habits in Daily Life', duration: '90 min', method: 'Scenario-based choices', tools: 'Interactive HTML · Mentimeter' },
+    ],
+    evening: '🌙 Cultural Night'
+  },
+  {
+    day: 4,
+    date: 'Thu 4 June',
+    theme: 'Green Habits & Creative Recycling',
+    sessions: [
+      { slot: 'AM', name: 'Creative Recycling Workshop', duration: '90 min', method: 'Hands-on + documentation', tools: 'Interactive HTML · Gallery' },
+      { slot: 'PM', name: 'Low-Carbon Lifestyle', duration: '90 min', method: 'Comparative country activity', tools: 'Interactive HTML · Mentimeter' },
+    ],
+    evening: '🌙 Intercultural Game Night'
+  },
+  {
+    day: 5,
+    date: 'Fri 5 June',
+    theme: 'Nature & the City',
+    sessions: [
+      { slot: 'AM', name: 'Institutional Visit', duration: '—', method: 'Guided visit + observation', tools: 'Observation sheet HTML' },
+      { slot: 'PM', name: 'Discovering Istanbul', duration: '—', method: 'Free exploration', tools: 'Istanbul Green Map HTML' },
+    ],
+    evening: '🌙 Free evening'
+  },
+  {
+    day: 6,
+    date: 'Sat 6 June',
+    theme: 'Micro-Green Solutions',
+    sessions: [
+      { slot: 'AM', name: 'Micro-Green Solutions Workshop', duration: '90 min', method: 'Design Thinking canvas', tools: 'Interactive HTML · Miro' },
+      { slot: 'PM', name: 'Green Map Workshop', duration: '90 min', method: 'Collaborative mapping', tools: 'GreenMap.org · Interactive HTML' },
+    ],
+    evening: '🌙 Karaoke / Talent Night'
+  },
+  {
+    day: 7,
+    date: 'Sun 7 June',
+    theme: 'Building the Outputs',
+    sessions: [
+      { slot: 'AM', name: 'Digital Escape Room — Co-design', duration: '90 min', method: 'Creative team design', tools: 'Genially · Interactive HTML' },
+      { slot: 'PM', name: 'Finalizing Outputs', duration: '90 min', method: 'Peer review + finalization', tools: 'Checklist HTML · Genially · GreenMap.org' },
+    ],
+    evening: '🌙 Cultural Evening'
+  },
+  {
+    day: 8,
+    date: 'Mon 8 June',
+    theme: 'Dissemination & Farewell',
+    sessions: [
+      { slot: 'AM', name: 'Dissemination Planning & Communication Strategies', duration: '90 min', method: 'Strategy canvas', tools: 'Interactive HTML · Canva' },
+      { slot: 'PM', name: 'Farewell Networking', duration: '90 min', method: 'Legacy wall', tools: 'Interactive HTML · Padlet' },
+    ],
+    evening: '🌙 Farewell Dinner'
+  },
+  {
+    day: 9,
+    date: 'Tue 9 June',
+    theme: 'Closing Day',
+    sessions: [
+      { slot: 'AM', name: 'Intro to Erasmus+ · YouthPass Filling · Final Evaluation', duration: '120 min', method: 'Self-assessment · Reflection', tools: 'Interactive HTML · YouthPass platform' },
+      { slot: 'PM', name: 'YouthPass Ceremony & Departures', duration: '—', method: 'Ceremony', tools: '—' },
+    ],
+    evening: '✈️ Departures'
+  },
+];
+
+// ─── RENDER DAYS GRID ────────────────────────────────────
+function renderDays() {
+  const grid = document.getElementById('daysGrid');
+  const evalData = JSON.parse(window.__northStore['north-eval'] || '{}');
+  grid.innerHTML = programme.map(day => {
+    const evaluated = evalData[day.day]?.mood !== undefined;
+    return `
+    <div class="day-card" onclick="showSession(${day.day}, 'AM')" style="cursor:none;">
+      <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+        <div class="day-number">0${day.day}</div>
+        ${evaluated ? `<div style="font-size:0.65rem; font-family:'Barlow Condensed',sans-serif; letter-spacing:0.2em; text-transform:uppercase; color:var(--secondary); padding-top:0.5rem;">✓ Evaluated</div>` : ''}
+      </div>
+      <div class="day-date">${day.date}</div>
+      <div class="day-theme">${day.theme}</div>
+      <ul class="day-sessions">
+        ${day.sessions.map(s => `
+          <li class="day-session-item" onclick="event.stopPropagation(); showSession(${day.day}, '${s.slot}')">
+            <span class="session-slot">${s.slot}</span>
+            <span class="session-name">${s.name}</span>
+            <span class="session-arrow">→</span>
+          </li>
+        `).join('')}
+      </ul>
+      <div class="day-evening">
+        <span class="evening-icon">${day.evening.split(' ')[0]}</span>
+        <span class="evening-label">${day.evening.split(' ').slice(1).join(' ')}</span>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ─── NAVIGATION ──────────────────────────────────────────
+function showScreen(name) {
+  document.querySelectorAll('.screen').forEach(s => {
+    s.classList.remove('active');
+    s.style.display = 'none';
+  });
+  const target = document.getElementById('screen-' + name);
+  target.style.display = name === 'home' ? 'flex' : 'block';
+  setTimeout(() => {
+    target.classList.add('active');
+    window.scrollTo(0, 0);
+  }, 50);
+}
+
+function showSession(dayNum, slot) {
+  const day = programme.find(d => d.day === dayNum);
+  const session = day.sessions.find(s => s.slot === slot);
+  const content = sessionContent[`${dayNum}-${slot}`];
+
+  document.getElementById('session-day-label').textContent = `Day ${dayNum}`;
+  document.getElementById('session-slot-label').textContent = slot === 'AM' ? 'Morning' : 'Afternoon';
+  document.getElementById('session-tag').textContent = `Day ${dayNum} · ${day.date} · ${slot === 'AM' ? 'Morning' : 'Afternoon'} Session`;
+  document.getElementById('session-title').textContent = session.name;
+  document.getElementById('session-duration').textContent = session.duration;
+  document.getElementById('session-method').textContent = session.method;
+  document.getElementById('session-tools').textContent = session.tools;
+  document.getElementById('session-group').textContent = session.group || 'Full group (32)';
+
+  const body = document.getElementById('session-body');
+
+  if (!content) {
+    body.innerHTML = `
+      <div class="session-placeholder">
+        <p>Session ${dayNum}-${slot} not found in sessionContent.</p>
+        <small>Keys available: ${Object.keys(sessionContent).join(', ')}</small>
+      </div>`;
+    showScreen('session');
+    return;
+  }
+
+  let html = buildSessionHTML(dayNum, slot, content);
+  if (!html || html.length < 10) {
+    body.innerHTML = `<div class="session-placeholder"><p>buildSessionHTML returned empty for ${dayNum}-${slot}.</p></div>`;
+    showScreen('session');
+    return;
+  }
+  body.innerHTML = html;
+
+  // Init interactive
+  if (content.interactive) initInteractive(content.interactive);
+
+  // Init evaluation if PM session
+  if (slot === 'PM' && dayNum <= 8) setTimeout(() => initEval(dayNum), 100);
+
+  showScreen('session');
+}
+
+function buildSessionHTML(dayNum, slot, content) {
+  let html = '';
+
+  if (content.description) {
+    html += `<p class="session-description">${content.description}</p>`;
+  }
+
+  if (content.objectives?.length) {
+    html += `<div class="session-objectives">
+      <h4>Learning Objectives</h4>
+      <ul class="objective-list">
+        ${content.objectives.map(o => `<li>${o}</li>`).join('')}
+      </ul>
+    </div>`;
+  }
+
+  if (content.steps?.length) {
+    html += `<div class="activity-block">
+      <div class="activity-block-label">Session Flow</div>
+      <div class="step-flow">
+        ${content.steps.map((s, i) => `
+          <div class="step-item">
+            <div class="step-num">${i + 1}</div>
+            <div class="step-body">
+              <strong>${s.title}</strong>
+              <span>${s.body}</span>
+              <span class="step-time">⏱ ${s.time}</span>
+            </div>
+          </div>
+        `).join('')}
+      </div>
+    </div>`;
+  }
+
+  if (content.interactive) {
+    html += renderInteractive(content.interactive);
+  }
+
+  if (content.facilitatorNote) {
+    html += `<div class="facilitator-note">
+      <div class="facilitator-note-label">Facilitator Note</div>
+      <p>${content.facilitatorNote}</p>
+    </div>`;
+  }
+
+  if (slot === 'PM' && dayNum <= 8) {
+    html += renderEvaluation(dayNum, slot);
+  }
+
+  html += renderSessionNav(dayNum, slot);
+
+  return html;
+}
+
+// ─── BINGO RENDERER ──────────────────────────────────────
+function renderBingo() {
+  return `
+    <div class="activity-block">
+      <div class="activity-block-label">Interactive Activity · Human Bingo</div>
+      <h3>Human Bingo Card</h3>
+      <p>Find a different person for each square. When you find a match, write their name and mark the cell. Complete a row to score — but keep going until time is up!</p>
+      <div style="display:flex; align-items:center; gap:2rem; margin: 1.25rem 0;">
+        <div>
+          <div class="bingo-counter" id="bingo-count">0</div>
+          <div class="timer-label">cells found</div>
+        </div>
+        <div style="flex:1">
+          <div class="timer-label" id="bingo-status" style="color:var(--accent); font-size:0.75rem; letter-spacing:0.15em;">Click a cell when you find a match!</div>
+        </div>
+        <button class="btn-secondary" onclick="resetBingo()">Reset</button>
+      </div>
+      <div class="bingo-grid" id="bingoGrid">
+        ${bingoPrompts.map((p, i) => `
+          <div class="bingo-cell" id="bc-${i}" onclick="toggleBingo(${i}, this)">
+            <span class="bingo-prompt">${p}</span>
+            <span class="bingo-name" id="bn-${i}"></span>
+          </div>
+        `).join('')}
+      </div>
+    </div>`;
+}
+
+function initBingo() {
+  // restore state if any
+  const saved = JSON.parse(window.__northStore['north-bingo'] || '{}');
+  Object.keys(saved).forEach(i => {
+    const cell = document.getElementById(`bc-${i}`);
+    const nameEl = document.getElementById(`bn-${i}`);
+    if (cell && saved[i]) {
+      cell.classList.add('found');
+      nameEl.textContent = saved[i];
+    }
+  });
+  updateBingoCount();
+}
+
+function toggleBingo(i, cell) {
+  if (cell.classList.contains('found')) return;
+  const name = prompt('Who matches this? Write their name:');
+  if (!name) return;
+  cell.classList.add('found');
+  document.getElementById(`bn-${i}`).textContent = name;
+  const saved = JSON.parse(window.__northStore['north-bingo'] || '{}');
+  saved[i] = name;
+  window.__northStore['north-bingo'] = JSON.stringify(saved);
+  updateBingoCount();
+}
+
+function resetBingo() {
+  delete window.__northStore['north-bingo'];
+  document.querySelectorAll('.bingo-cell').forEach(c => c.classList.remove('found'));
+  document.querySelectorAll('.bingo-name').forEach(n => n.textContent = '');
+  updateBingoCount();
+}
+
+function updateBingoCount() {
+  const found = document.querySelectorAll('.bingo-cell.found').length;
+  const el = document.getElementById('bingo-count');
+  const status = document.getElementById('bingo-status');
+  if (el) el.textContent = found;
+  if (status) {
+    if (found >= 16) status.textContent = '🎉 Full card! Outstanding!';
+    else if (found >= 4) status.textContent = `Row complete! Keep going — ${16 - found} cells left.`;
+    else status.textContent = `Click a cell when you find a match!`;
+  }
+}
+
+// ─── GROUP AGREEMENT RENDERER ────────────────────────────
+function renderAgreement() {
+  const sections = [
+    { id: 'communicate', label: 'How we communicate', placeholder: 'e.g. We speak slowly, we use simple English, we listen without interrupting...' },
+    { id: 'conflict', label: 'How we handle disagreement', placeholder: 'e.g. We talk directly, we don\'t shout, we ask for a break if needed...' },
+    { id: 'expect', label: 'What we expect from each other', placeholder: 'e.g. Punctuality, open mind, phone-free during sessions...' },
+    { id: 'nonneg', label: 'Our non-negotiables', placeholder: 'e.g. No discrimination, no exclusion, respect for all identities...' },
+    { id: 'fun', label: 'How we keep energy high', placeholder: 'e.g. Music breaks, silly games, snacks, celebrating small wins...' },
+  ];
+  return `
+    <div class="activity-block">
+      <div class="activity-block-label">Interactive Tool · Group Agreement Canvas</div>
+      <h3>Our Group Agreement</h3>
+      <p>Fill in each section together as a group. When complete, this becomes your shared contract for the exchange.</p>
+      <div style="display:flex; flex-direction:column; gap:1rem; margin-top:1.5rem;">
+        ${sections.map(s => `
+          <div>
+            <div style="font-family:'Barlow Condensed',sans-serif; font-size:0.65rem; letter-spacing:0.3em; text-transform:uppercase; color:var(--accent); margin-bottom:0.4rem;">${s.label}</div>
+            <textarea id="ag-${s.id}" placeholder="${s.placeholder}"
+              style="width:100%; background:rgba(27,77,92,0.3); border:1px solid rgba(201,169,110,0.2); color:var(--text-light); font-family:'Barlow',sans-serif; font-size:0.85rem; font-weight:300; padding:0.75rem 1rem; resize:vertical; min-height:70px; outline:none; line-height:1.6;"
+              oninput="saveAgreement()"
+            ></textarea>
+          </div>
+        `).join('')}
+        <div style="display:flex; gap:1rem; margin-top:0.5rem;">
+          <button class="btn-primary" onclick="copyAgreement()">Copy Agreement</button>
+          <button class="btn-secondary" onclick="clearAgreement()">Clear All</button>
+        </div>
+      </div>
+    </div>`;
+}
+
+function saveAgreement() {
+  const ids = ['communicate','conflict','expect','nonneg','fun'];
+  const data = {};
+  ids.forEach(id => { const el = document.getElementById('ag-'+id); if(el) data[id] = el.value; });
+  window.__northStore['north-agreement'] = JSON.stringify(data);
+}
+function clearAgreement() {
+  if(!confirm('Clear the entire agreement?')) return;
+  delete window.__northStore['north-agreement'];
+  ['communicate','conflict','expect','nonneg','fun'].forEach(id => { const el = document.getElementById('ag-'+id); if(el) el.value=''; });
+}
+function copyAgreement() {
+  const ids = ['communicate','conflict','expect','nonneg','fun'];
+  const labels = ['How we communicate','How we handle disagreement','What we expect from each other','Our non-negotiables','How we keep energy high'];
+  let text = 'N.O.R.T.H. GROUP AGREEMENT\n\n';
+  ids.forEach((id,i) => { const el = document.getElementById('ag-'+id); if(el && el.value) text += `${labels[i]}:\n${el.value}\n\n`; });
+  navigator.clipboard.writeText(text).then(() => alert('Agreement copied to clipboard!'));
+}
+function initAgreement() {
+  const saved = JSON.parse(window.__northStore['north-agreement'] || '{}');
+  Object.keys(saved).forEach(id => { const el = document.getElementById('ag-'+id); if(el) el.value = saved[id]; });
+}
+
+// ─── QUIZ RENDERER ───────────────────────────────────────
+const quizData = [
+  { q: 'What percentage of global CO₂ emissions comes from food production?', options: ['10%','26%','40%','55%'], correct: 1, fact: 'Food systems account for about 26% of global greenhouse gas emissions (Our World in Data, 2020).' },
+  { q: 'Which country recycles the highest percentage of its municipal waste in Europe?', options: ['Germany','Sweden','Turkey','Switzerland'], correct: 0, fact: 'Germany consistently leads Europe in recycling rates, recycling over 66% of municipal waste.' },
+  { q: 'How much of the world\'s plastic waste has ever been recycled?', options: ['9%','25%','45%','60%'], correct: 0, fact: 'Only about 9% of all plastic ever produced has been recycled. 12% was incinerated. The rest is in landfills or the environment.' },
+  { q: 'Istanbul has one of the world\'s largest urban forests. Approximately how large is it?', options: ['5,000 hectares','30,000 hectares','75,000 hectares','120,000 hectares'], correct: 2, fact: 'The Belgrade Forest near Istanbul covers approximately 75,000 hectares and is one of the largest urban forests in Europe.' },
+  { q: 'What is the "carbon footprint" target per person per year to stay within 1.5°C of warming?', options: ['8 tonnes CO₂','5 tonnes CO₂','2.5 tonnes CO₂','0.5 tonnes CO₂'], correct: 2, fact: 'To limit global warming to 1.5°C, each person needs to emit no more than about 2.5 tonnes of CO₂ per year. The current EU average is 8.4 tonnes.' },
+  { q: 'Which of these has the HIGHEST carbon footprint per kilogram of food?', options: ['Tofu','Chicken','Lamb','Rice'], correct: 2, fact: 'Lamb produces about 24kg of CO₂ per kg of food — the highest of common foods. Beef is second. Tofu produces about 2kg.' },
+  { q: 'Spain generates approximately how much solar energy as a percentage of its electricity?', options: ['5%','15%','30%','50%'], correct: 2, fact: 'Spain generated about 30% of its electricity from solar in recent years, making it one of Europe\'s solar leaders.' },
+  { q: 'What does "fast fashion" contribute to global water pollution?', options: ['5%','10%','20%','35%'], correct: 2, fact: 'The fashion industry is responsible for about 20% of global wastewater, largely from dyeing and finishing processes.' },
+  { q: 'North Macedonia gets approximately what share of its energy from renewables?', options: ['10%','25%','40%','60%'], correct: 1, fact: 'North Macedonia generates around 25% of its electricity from renewables, primarily hydropower.' },
+  { q: 'Which Serbian city is piloting a large-scale urban rewilding project?', options: ['Belgrade','Novi Sad','Niš','Subotica'], correct: 0, fact: 'Belgrade has several urban rewilding initiatives including the Sava River restoration project and Ada Ciganlija nature zone.' },
+];
+
+function renderQuiz() {
+  return `
+    <div class="activity-block">
+      <div class="activity-block-label">Interactive Activity · Sustainability Quiz</div>
+      <h3>Green Knowledge Challenge</h3>
+      <p>10 questions · Teams compete · Fastest correct answer wins. Track your team's score below.</p>
+      <div style="display:flex; gap:1rem; align-items:center; margin:1.25rem 0; flex-wrap:wrap;">
+        <div><div class="bingo-counter" id="quiz-score">0</div><div class="timer-label">your score</div></div>
+        <div style="flex:1; min-width:200px;">
+          <div id="quiz-status" style="font-family:'Barlow Condensed',sans-serif; font-size:0.75rem; letter-spacing:0.15em; color:var(--accent);">Question 1 of ${quizData.length}</div>
+        </div>
+        <div class="timer-display" id="quiz-timer" style="font-size:2rem;">—</div>
+      </div>
+      <div id="quiz-container" style="margin-top:1rem;"></div>
+    </div>`;
+}
+
+let quizState = { current: 0, score: 0, answered: false, timerInt: null };
+
+function initQuiz() {
+  quizState = { current: 0, score: 0, answered: false, timerInt: null };
+  renderQuizQuestion();
+}
+
+function renderQuizQuestion() {
+  const container = document.getElementById('quiz-container');
+  if (!container) return;
+  const q = quizData[quizState.current];
+  container.innerHTML = `
+    <div style="background:rgba(15,45,56,0.6); border:1px solid rgba(201,169,110,0.15); padding:1.5rem; margin-bottom:1rem;">
+      <div style="font-family:'Cormorant Garamond',serif; font-size:1.3rem; font-weight:400; color:var(--text-light); margin-bottom:1.25rem; line-height:1.4;">${q.q}</div>
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.5rem;" id="quiz-options">
+        ${q.options.map((opt,i) => `
+          <button onclick="answerQuiz(${i})" id="qopt-${i}"
+            style="background:rgba(27,77,92,0.3); border:1px solid rgba(201,169,110,0.15); color:var(--text-muted); font-family:'Barlow',sans-serif; font-size:0.82rem; padding:0.75rem 1rem; cursor:none; text-align:left; transition:all 0.3s; line-height:1.4;"
+            onmouseover="this.style.borderColor='rgba(201,169,110,0.4)'; this.style.color='var(--text-light)'"
+            onmouseout="if(!this.disabled){this.style.borderColor='rgba(201,169,110,0.15)'; this.style.color='var(--text-muted)'}"
+          ><strong style="color:var(--accent); margin-right:0.5rem;">${['A','B','C','D'][i]}.</strong> ${opt}</button>
+        `).join('')}
+      </div>
+      <div id="quiz-fact" style="display:none; margin-top:1rem; padding:1rem; background:rgba(74,124,111,0.15); border-left:3px solid var(--secondary); font-family:'Barlow',sans-serif; font-size:0.82rem; color:var(--text-muted); line-height:1.6;"></div>
+    </div>
+    <div style="display:flex; gap:1rem;">
+      ${quizState.current < quizData.length - 1 
+        ? `<button class="btn-primary" id="quiz-next" onclick="nextQuestion()" style="display:none;">Next Question →</button>`
+        : `<button class="btn-primary" id="quiz-next" onclick="finishQuiz()" style="display:none;">See Results</button>`}
+      <button class="btn-secondary" onclick="initQuiz()">Restart</button>
+    </div>`;
+  startQuizTimer();
+  document.getElementById('quiz-status').textContent = `Question ${quizState.current + 1} of ${quizData.length}`;
+}
+
+let quizSeconds = 0;
+function startQuizTimer() {
+  clearInterval(quizState.timerInt);
+  quizSeconds = 0;
+  const display = document.getElementById('quiz-timer');
+  quizState.timerInt = setInterval(() => {
+    quizSeconds++;
+    if(display) display.textContent = quizSeconds + 's';
+  }, 1000);
+}
+
+function answerQuiz(chosen) {
+  if (quizState.answered) return;
+  quizState.answered = true;
+  clearInterval(quizState.timerInt);
+  const q = quizData[quizState.current];
+  const btns = document.querySelectorAll('#quiz-options button');
+  btns.forEach((btn, i) => {
+    btn.disabled = true;
+    if (i === q.correct) btn.style.background = 'rgba(74,124,111,0.4)';
+    else if (i === chosen && chosen !== q.correct) btn.style.background = 'rgba(180,60,60,0.3)';
+  });
+  if (chosen === q.correct) {
+    quizState.score++;
+    document.getElementById('quiz-score').textContent = quizState.score;
+  }
+  const fact = document.getElementById('quiz-fact');
+  fact.style.display = 'block';
+  fact.textContent = '💡 ' + q.fact;
+  const next = document.getElementById('quiz-next');
+  if(next) next.style.display = 'inline-flex';
+}
+
+function nextQuestion() {
+  quizState.current++;
+  quizState.answered = false;
+  renderQuizQuestion();
+}
+
+function finishQuiz() {
+  clearInterval(quizState.timerInt);
+  const container = document.getElementById('quiz-container');
+  container.innerHTML = `
+    <div style="text-align:center; padding:3rem; background:rgba(27,77,92,0.2); border:1px solid rgba(201,169,110,0.2);">
+      <div class="bingo-counter" style="font-size:4rem;">${quizState.score}/${quizData.length}</div>
+      <div style="font-family:'Cormorant Garamond',serif; font-size:1.5rem; font-style:italic; color:var(--text-light); margin:1rem 0;">
+        ${quizState.score >= 8 ? 'Outstanding green knowledge!' : quizState.score >= 5 ? 'Good effort — keep learning!' : 'Lots to discover this week!'}
+      </div>
+      <button class="btn-secondary" onclick="initQuiz()" style="margin-top:1rem;">Play Again</button>
+    </div>`;
+}
+
+// ─── CARBON CALCULATOR ───────────────────────────────────
+function renderCarbon() {
+  return `
+    <div class="activity-block">
+      <div class="activity-block-label">Interactive Tool · Personal Carbon Footprint Calculator</div>
+      <h3>What is your carbon footprint?</h3>
+      <p>Answer the questions below to estimate your annual CO₂ footprint. Results are approximate — use them as a starting point for reflection, not as a precise measurement.</p>
+      <div style="display:flex; flex-direction:column; gap:1.25rem; margin-top:1.5rem;">
+        ${[
+          { id:'diet', label:'Diet', q:'What best describes your diet?', opts:[['Meat every day','3.3t'],['Meat a few times a week','2.5t'],['Pescatarian','1.9t'],['Vegetarian','1.5t'],['Vegan','1.1t']] },
+          { id:'transport', label:'Daily transport', q:'How do you usually get around?', opts:[['Car (alone)','2.0t'],['Car (shared)','1.2t'],['Motorcycle','0.9t'],['Public transport','0.4t'],['Cycling / walking','0.05t']] },
+          { id:'flights', label:'Flights', q:'How many return long-haul flights per year?', opts:[['None','0t'],['1 flight','0.7t'],['2–3 flights','1.8t'],['4+ flights','3.5t']] },
+          { id:'energy', label:'Home energy', q:'How is your home heated?', opts:[['Gas / oil','1.8t'],['Electric (grid)','1.2t'],['District heating','0.8t'],['Renewables','0.2t'],['I don\'t know','1.0t']] },
+          { id:'shopping', label:'Consumption', q:'How often do you buy new clothes?', opts:[['Rarely / second-hand only','0.2t'],['A few times a year','0.6t'],['Monthly','1.2t'],['Very often','2.0t']] },
+        ].map(f => `
+          <div style="background:rgba(15,45,56,0.5); border:1px solid rgba(201,169,110,0.12); padding:1.25rem;">
+            <div style="font-family:'Barlow Condensed',sans-serif; font-size:0.65rem; letter-spacing:0.3em; text-transform:uppercase; color:var(--accent); margin-bottom:0.5rem;">${f.label}</div>
+            <div style="font-family:'Barlow',sans-serif; font-size:0.85rem; color:var(--text-muted); margin-bottom:0.75rem;">${f.q}</div>
+            <div style="display:flex; flex-wrap:wrap; gap:0.4rem;">
+              ${f.opts.map((o,i) => `<button id="cf-${f.id}-${i}" onclick="selectCarbon('${f.id}',${i},${parseFloat(o[1])})" style="background:rgba(27,77,92,0.3); border:1px solid rgba(201,169,110,0.15); color:var(--text-muted); font-family:'Barlow',sans-serif; font-size:0.75rem; padding:0.4rem 0.75rem; cursor:none; transition:all 0.3s;">${o[0]}</button>`).join('')}
+            </div>
+          </div>
+        `).join('')}
+        <div style="background:rgba(27,77,92,0.3); border:1px solid rgba(201,169,110,0.3); padding:1.5rem; text-align:center;">
+          <div class="timer-label" style="margin-bottom:0.5rem;">Your estimated annual footprint</div>
+          <div class="bingo-counter" id="carbon-result" style="font-size:3.5rem;">—</div>
+          <div class="timer-label" id="carbon-label" style="margin-top:0.25rem;">tonnes CO₂ / year</div>
+          <div id="carbon-compare" style="margin-top:1rem; font-family:'Barlow',sans-serif; font-size:0.8rem; color:var(--text-muted); line-height:1.6;"></div>
+        </div>
+      </div>
+    </div>`;
+}
+
+const carbonSelections = {};
+function selectCarbon(field, idx, value) {
+  // Deselect others in same field
+  document.querySelectorAll(`[id^="cf-${field}-"]`).forEach(b => { b.style.background='rgba(27,77,92,0.3)'; b.style.color='var(--text-muted)'; b.style.borderColor='rgba(201,169,110,0.15)'; });
+  document.getElementById(`cf-${field}-${idx}`).style.background = 'rgba(74,124,111,0.35)';
+  document.getElementById(`cf-${field}-${idx}`).style.borderColor = 'rgba(74,124,111,0.6)';
+  document.getElementById(`cf-${field}-${idx}`).style.color = 'var(--text-light)';
+  carbonSelections[field] = value;
+  const fields = ['diet','transport','flights','energy','shopping'];
+  if (fields.every(f => carbonSelections[f] !== undefined)) {
+    const total = fields.reduce((sum,f) => sum + carbonSelections[f], 0);
+    const result = document.getElementById('carbon-result');
+    const compare = document.getElementById('carbon-compare');
+    if(result) result.textContent = total.toFixed(1) + 't';
+    if(compare) {
+      const eu = 8.4; const target = 2.5;
+      compare.innerHTML = `EU average: <strong style="color:var(--accent)">8.4t</strong> &nbsp;·&nbsp; Paris target: <strong style="color:var(--secondary)">2.5t</strong><br>
+      ${total > eu ? `Your footprint is <strong style="color:#c0504d">${(total-eu).toFixed(1)}t above</strong> the EU average.` :
+        total > target ? `You\'re below the EU average — ${(total-target).toFixed(1)}t above the Paris target.` :
+        `🎉 You\'re below the Paris Agreement 1.5°C target. Remarkable.`}`;
+    }
+  }
+}
+
+// ─── SCENARIO RENDERER ───────────────────────────────────
+const scenarios = [
+  { q: 'You need to travel 200km for work. What do you do?', opts: ['Take the train','Drive alone','Carpool','Take a bus','Work remotely'] },
+  { q: 'You need to buy a birthday gift for a friend. What do you choose?', opts: ['Buy something new online','Buy second-hand','Give an experience','Make something yourself','Buy local & sustainable'] },
+  { q: 'Your phone breaks. What do you do?', opts: ['Buy the latest model','Buy a refurbished phone','Repair it','Go without a smartphone','Borrow one'] },
+  { q: 'You have 10 euros extra this week. Where does it go?', opts: ['Fast food treat','Save it','Donate to an environmental NGO','Buy a plant for your home','Support a local business'] },
+  { q: 'You are shopping for a week of meals. What do you buy?', opts: ['Whatever is cheapest','Local & seasonal produce','Mostly plant-based','Organic certified','Whatever is convenient'] },
+];
+
+function renderScenario() {
+  return `
+    <div class="activity-block">
+      <div class="activity-block-label">Interactive Activity · Scenario Challenge</div>
+      <h3>What would you do?</h3>
+      <p>Five everyday situations. Choose your answer — then see how the group responds. No right or wrong answers: the goal is to understand why we choose differently.</p>
+      <div id="scenario-container" style="margin-top:1.5rem;"></div>
+    </div>`;
+}
+
+let scenarioState = { current: 0, answers: [] };
+function initScenario() {
+  scenarioState = { current: 0, answers: [] };
+  renderScenarioQuestion();
+}
+function renderScenarioQuestion() {
+  const container = document.getElementById('scenario-container');
+  if (!container) return;
+  if (scenarioState.current >= scenarios.length) {
+    container.innerHTML = `<div style="text-align:center; padding:2rem; font-family:'Cormorant Garamond',serif; font-size:1.4rem; font-style:italic; color:var(--text-light);">All scenarios completed! Now discuss: what surprised you about your own choices?<br><br><button class="btn-secondary" onclick="initScenario()">Start Again</button></div>`;
+    return;
+  }
+  const s = scenarios[scenarioState.current];
+  container.innerHTML = `
+    <div style="margin-bottom:0.75rem; font-family:'Barlow Condensed',sans-serif; font-size:0.65rem; letter-spacing:0.3em; text-transform:uppercase; color:var(--accent);">Scenario ${scenarioState.current+1} of ${scenarios.length}</div>
+    <div style="font-family:'Cormorant Garamond',serif; font-size:1.4rem; color:var(--text-light); margin-bottom:1.25rem; line-height:1.4;">"${s.q}"</div>
+    <div style="display:flex; flex-direction:column; gap:0.5rem;">
+      ${s.opts.map((opt,i) => `
+        <button onclick="chooseScenario(${i})" style="background:rgba(27,77,92,0.3); border:1px solid rgba(201,169,110,0.15); color:var(--text-muted); font-family:'Barlow',sans-serif; font-size:0.85rem; padding:0.85rem 1.25rem; cursor:none; text-align:left; transition:all 0.3s;"
+          onmouseover="this.style.background='rgba(27,77,92,0.5)'; this.style.color='var(--text-light)'"
+          onmouseout="this.style.background='rgba(27,77,92,0.3)'; this.style.color='var(--text-muted)'">
+          ${opt}
+        </button>
+      `).join('')}
+    </div>`;
+}
+function chooseScenario(i) {
+  scenarioState.answers.push({ scenario: scenarioState.current, choice: i });
+  scenarioState.current++;
+  renderScenarioQuestion();
+}
+
+// ─── GALLERY RENDERER ────────────────────────────────────
+function renderGallery() {
+  return `
+    <div class="activity-block">
+      <div class="activity-block-label">Interactive Tool · Recycling Creation Gallery</div>
+      <h3>Document Your Creation</h3>
+      <p>Each team fills in their creation's details below. This gallery becomes part of the Green Map output.</p>
+      <div style="display:flex; flex-direction:column; gap:1.5rem; margin-top:1.5rem;" id="gallery-entries">
+        ${['Team 1','Team 2','Team 3','Team 4'].map((team,t) => `
+          <div style="background:rgba(15,45,56,0.5); border:1px solid rgba(201,169,110,0.15); padding:1.25rem;">
+            <div style="font-family:'Barlow Condensed',sans-serif; font-size:0.65rem; letter-spacing:0.3em; text-transform:uppercase; color:var(--accent); margin-bottom:1rem;">${team}</div>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.75rem;">
+              <input placeholder="Creation name" id="gal-${t}-name" oninput="saveGallery()" style="background:rgba(27,77,92,0.3); border:1px solid rgba(201,169,110,0.15); color:var(--text-light); font-family:'Barlow',sans-serif; font-size:0.82rem; padding:0.6rem 0.75rem; outline:none; width:100%;">
+              <input placeholder="Materials used" id="gal-${t}-materials" oninput="saveGallery()" style="background:rgba(27,77,92,0.3); border:1px solid rgba(201,169,110,0.15); color:var(--text-light); font-family:'Barlow',sans-serif; font-size:0.82rem; padding:0.6rem 0.75rem; outline:none; width:100%;">
+            </div>
+            <textarea placeholder="What does it do? Who is it for? Could someone replicate it at home?" id="gal-${t}-desc" oninput="saveGallery()" style="width:100%; margin-top:0.75rem; background:rgba(27,77,92,0.3); border:1px solid rgba(201,169,110,0.15); color:var(--text-light); font-family:'Barlow',sans-serif; font-size:0.82rem; padding:0.6rem 0.75rem; resize:vertical; min-height:60px; outline:none;"></textarea>
+          </div>
+        `).join('')}
+      </div>
+      <button class="btn-secondary" onclick="copyGallery()" style="margin-top:1rem;">Copy Gallery Summary</button>
+    </div>`;
+}
+function saveGallery() {
+  const data = [];
+  for(let t=0;t<4;t++) data.push({ name: document.getElementById(`gal-${t}-name`)?.value, materials: document.getElementById(`gal-${t}-materials`)?.value, desc: document.getElementById(`gal-${t}-desc`)?.value });
+  window.__northStore['north-gallery'] = JSON.stringify(data);
+}
+function initGallery() {
+  const saved = JSON.parse(window.__northStore['north-gallery'] || '[]');
+  saved.forEach((d,t) => { if(document.getElementById(`gal-${t}-name`)) { document.getElementById(`gal-${t}-name`).value=d.name||''; document.getElementById(`gal-${t}-materials`).value=d.materials||''; document.getElementById(`gal-${t}-desc`).value=d.desc||''; }});
+}
+function copyGallery() {
+  const teams = ['Team 1','Team 2','Team 3','Team 4'];
+  let text = 'N.O.R.T.H. RECYCLING GALLERY\n\n';
+  for(let t=0;t<4;t++) text += `${teams[t]}\nName: ${document.getElementById(`gal-${t}-name`)?.value||'—'}\nMaterials: ${document.getElementById(`gal-${t}-materials`)?.value||'—'}\nDescription: ${document.getElementById(`gal-${t}-desc`)?.value||'—'}\n\n`;
+  navigator.clipboard.writeText(text).then(() => alert('Gallery copied!'));
+}
+
+// ─── MATRIX RENDERER (Country Infrastructure) ────────────
+function renderMatrix() {
+  const dimensions = ['Public transport','Renewable energy access','Plant-based food access','Recycling infrastructure','Cycling infrastructure'];
+  const countries = ['🇹🇷 Türkiye','🇪🇸 Spain','🇲🇰 N. Macedonia','🇷🇸 Serbia'];
+  return `
+    <div class="activity-block">
+      <div class="activity-block-label">Interactive Tool · Country Infrastructure Audit</div>
+      <h3>How easy is low-carbon living in your country?</h3>
+      <p>Each national team scores their country 1–5 on each dimension. 1 = very difficult, 5 = very easy.</p>
+      <div style="overflow-x:auto; margin-top:1.5rem;">
+        <table style="width:100%; border-collapse:collapse; font-family:'Barlow',sans-serif; font-size:0.8rem;">
+          <thead>
+            <tr>
+              <th style="text-align:left; padding:0.75rem; color:var(--accent); font-weight:500; font-family:'Barlow Condensed',sans-serif; letter-spacing:0.15em; border-bottom:1px solid rgba(201,169,110,0.2);">Dimension</th>
+              ${countries.map(c => `<th style="text-align:center; padding:0.75rem; color:var(--accent); font-weight:500; font-family:'Barlow Condensed',sans-serif; letter-spacing:0.1em; border-bottom:1px solid rgba(201,169,110,0.2);">${c}</th>`).join('')}
+            </tr>
+          </thead>
+          <tbody>
+            ${dimensions.map((dim,d) => `
+              <tr style="border-bottom:1px solid rgba(201,169,110,0.08);">
+                <td style="padding:0.75rem; color:var(--text-muted);">${dim}</td>
+                ${countries.map((c,ci) => `
+                  <td style="text-align:center; padding:0.5rem;">
+                    <select id="mx-${d}-${ci}" onchange="updateMatrix()" style="background:rgba(27,77,92,0.4); border:1px solid rgba(201,169,110,0.2); color:var(--text-light); font-family:'Barlow',sans-serif; font-size:0.82rem; padding:0.3rem 0.5rem; cursor:pointer; outline:none; width:50px; text-align:center;">
+                      <option>—</option>${[1,2,3,4,5].map(n=>`<option value="${n}">${n}</option>`).join('')}
+                    </select>
+                  </td>
+                `).join('')}
+              </tr>
+            `).join('')}
+            <tr style="background:rgba(201,169,110,0.05);">
+              <td style="padding:0.75rem; color:var(--accent); font-family:'Barlow Condensed',sans-serif; font-size:0.7rem; letter-spacing:0.2em; text-transform:uppercase;">TOTAL / 25</td>
+              ${countries.map((c,ci) => `<td id="mx-total-${ci}" style="text-align:center; padding:0.75rem; font-family:'Cormorant Garamond',serif; font-size:1.4rem; color:var(--text-light);">—</td>`).join('')}
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>`;
+}
+function updateMatrix() {
+  for(let ci=0;ci<4;ci++) {
+    let total = 0; let valid = true;
+    for(let d=0;d<5;d++) { const val = document.getElementById(`mx-${d}-${ci}`)?.value; if(val==='—') { valid=false; break; } total+=parseInt(val); }
+    const el = document.getElementById(`mx-total-${ci}`);
+    if(el) el.textContent = valid ? total : '—';
+  }
+}
+
+// ─── OBSERVATION SHEET ───────────────────────────────────
+function renderObservation() {
+  const focuses = ['Community engagement & participation','Practical green initiatives & solutions','Challenges, barriers & limitations','Transferability to other countries'];
+  return `
+    <div class="activity-block">
+      <div class="activity-block-label">Interactive Tool · Institutional Visit Observation Sheet</div>
+      <h3>Structured Observation Guide</h3>
+      <p>Each team uses their assigned focus area. Take notes during the visit using this sheet.</p>
+      <div style="display:flex; flex-direction:column; gap:1rem; margin-top:1.5rem;">
+        ${focuses.map((f,i) => `
+          <div style="background:rgba(15,45,56,0.5); border:1px solid rgba(201,169,110,0.15); padding:1.25rem;">
+            <div style="font-family:'Barlow Condensed',sans-serif; font-size:0.65rem; letter-spacing:0.3em; text-transform:uppercase; color:var(--accent); margin-bottom:0.4rem;">Team ${i+1} Focus</div>
+            <div style="font-family:'Barlow',sans-serif; font-size:0.9rem; color:var(--text-light); margin-bottom:0.75rem; font-weight:400;">${f}</div>
+            <textarea id="obs-${i}" placeholder="Your observations, quotes, and notes..." oninput="saveObs()" style="width:100%; background:rgba(27,77,92,0.25); border:1px solid rgba(201,169,110,0.1); color:var(--text-light); font-family:'Barlow',sans-serif; font-size:0.82rem; padding:0.6rem 0.75rem; resize:vertical; min-height:80px; outline:none; line-height:1.6;"></textarea>
+            <input placeholder="Our 2 prepared questions for the host..." id="obs-q${i}" oninput="saveObs()" style="width:100%; margin-top:0.5rem; background:rgba(27,77,92,0.25); border:1px solid rgba(201,169,110,0.1); color:var(--text-muted); font-family:'Barlow',sans-serif; font-size:0.8rem; padding:0.5rem 0.75rem; outline:none;">
+          </div>
+        `).join('')}
+      </div>
+    </div>`;
+}
+function saveObs() { const data={}; for(let i=0;i<4;i++){data['obs-'+i]=document.getElementById('obs-'+i)?.value; data['obs-q'+i]=document.getElementById('obs-q'+i)?.value;} window.__northStore['north-obs'] = JSON.stringify(data); }
+function initObs() { const s=JSON.parse(window.__northStore['north-obs']||'{}'); for(let i=0;i<4;i++){if(document.getElementById('obs-'+i)){document.getElementById('obs-'+i).value=s['obs-'+i]||''; document.getElementById('obs-q'+i).value=s['obs-q'+i]||'';}} }
+
+// ─── ISTANBUL MAP RENDERER ───────────────────────────────
+function renderIstanbulMap() {
+  const spots = [
+    { name: 'Yıldız Park', cat: 'Green Space', desc: 'One of Istanbul\'s largest historical parks — forested hillside, wildlife, Ottoman pavilions.', tip: 'Best entered from Beşiktaş. Free entry.' },
+    { name: 'Boğaziçi Üniversitesi Organic Garden', cat: 'Urban Farming', desc: 'Community garden run by students on the Boğaziçi campus.', tip: 'Contact in advance for a visit.' },
+    { name: 'Arasta Bazaar', cat: 'Local Market', desc: 'Small traditional market near the Blue Mosque — local crafts and spices.', tip: 'Much less touristy than the Grand Bazaar.' },
+    { name: 'Balıkçı Hali — Kumkapı Fish Market', cat: 'Local Food', desc: 'Traditional fish market where local catch is sold directly by fishermen.', tip: 'Go early morning for the freshest catch and most authentic atmosphere.' },
+    { name: 'Princes\' Islands (Adalar)', cat: 'Car-Free Zone', desc: 'Nine islands in the Sea of Marmara — no motorised vehicles allowed. Transport by horse carriage or bicycle.', tip: 'Ferry from Kabataş. Büyükada is the largest and most interesting.' },
+    { name: 'Karaköy Organik Pazar', cat: 'Organic Market', desc: 'Weekly organic farmers\' market in Karaköy — local producers, seasonal produce.', tip: 'Saturday mornings only.' },
+    { name: 'ÇEKÜL Foundation', cat: 'Environmental NGO', desc: 'Organisation working on cultural landscape preservation and urban green spaces in Turkey.', tip: 'Worth visiting or contacting for a guided conversation.' },
+    { name: 'Gezi Park', cat: 'Green Space', desc: 'Famous public park in Taksim — symbol of urban green space resistance.', tip: 'Small but historically significant. Adjacent to Taksim Square.' },
+  ];
+  return `
+    <div class="activity-block">
+      <div class="activity-block-label">Interactive Guide · Istanbul Green Explorer</div>
+      <h3>Discover Istanbul's Green Side</h3>
+      <p>Suggested spots for your afternoon. Choose at least 2 to visit and document them for the Green Map.</p>
+      <div style="display:grid; grid-template-columns: repeat(auto-fill, minmax(280px,1fr)); gap:1rem; margin-top:1.5rem;">
+        ${spots.map((s,i) => `
+          <div id="ispot-${i}" onclick="toggleSpot(${i})" style="background:rgba(27,77,92,0.3); border:1px solid rgba(201,169,110,0.15); padding:1.25rem; cursor:none; transition:all 0.3s;">
+            <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:0.5rem;">
+              <div style="font-family:'Barlow Condensed',sans-serif; font-size:0.6rem; letter-spacing:0.25em; text-transform:uppercase; color:var(--secondary);">${s.cat}</div>
+              <div id="ispot-check-${i}" style="width:16px;height:16px;border:1px solid rgba(201,169,110,0.3);border-radius:50%;flex-shrink:0;"></div>
+            </div>
+            <div style="font-family:'Cormorant Garamond',serif; font-size:1.1rem; color:var(--text-light); margin-bottom:0.4rem;">${s.name}</div>
+            <div style="font-family:'Barlow',sans-serif; font-size:0.78rem; color:var(--text-muted); line-height:1.5; margin-bottom:0.5rem;">${s.desc}</div>
+            <div style="font-family:'Barlow',sans-serif; font-size:0.72rem; color:var(--accent); opacity:0.8;">💡 ${s.tip}</div>
+          </div>
+        `).join('')}
+      </div>
+      <div style="margin-top:1.25rem; font-family:'Barlow Condensed',sans-serif; font-size:0.7rem; letter-spacing:0.2em; color:var(--text-muted);">
+        Selected: <span id="ispot-count" style="color:var(--accent);">0</span> / 8 spots — aim for at least 2
+      </div>
+    </div>`;
+}
+function toggleSpot(i) {
+  const card = document.getElementById(`ispot-${i}`);
+  const check = document.getElementById(`ispot-check-${i}`);
+  const active = card.style.borderColor === 'rgba(74, 124, 111, 0.6)';
+  card.style.borderColor = active ? 'rgba(201,169,110,0.15)' : 'rgba(74,124,111,0.6)';
+  card.style.background = active ? 'rgba(27,77,92,0.3)' : 'rgba(74,124,111,0.15)';
+  check.style.background = active ? '' : 'var(--secondary)';
+  check.style.borderColor = active ? 'rgba(201,169,110,0.3)' : 'var(--secondary)';
+  const count = document.querySelectorAll('[id^="ispot-"]').length;
+  let selected = 0;
+  for(let j=0;j<8;j++) { const c=document.getElementById(`ispot-${j}`); if(c && c.style.background.includes('74,124')) selected++; }
+  document.getElementById('ispot-count').textContent = selected;
+}
+
+// ─── DESIGN CANVAS RENDERER ──────────────────────────────
+function renderDesignCanvas() {
+  const teams = ['Team 1','Team 2','Team 3','Team 4'];
+  const fields = [
+    { id:'problem', label:'Problem', placeholder:'What environmental problem in your country are you addressing? Who is affected?' },
+    { id:'core', label:'Core challenge', placeholder:'In one sentence: what is the root of this problem?' },
+    { id:'ideas', label:'5 solution ideas', placeholder:'List at least 5 ideas — no filtering yet, quantity over quality!' },
+    { id:'best', label:'Best idea & why', placeholder:'Which idea did you choose and why? What makes it a micro-green solution?' },
+  ];
+  return `
+    <div class="activity-block">
+      <div class="activity-block-label">Interactive Tool · Design Thinking Canvas</div>
+      <h3>Micro-Green Solution Sprint</h3>
+      <p>Each team fills in their country's canvas. This material feeds directly into the Green Map.</p>
+      <div style="display:flex; gap:0.5rem; flex-wrap:wrap; margin:1rem 0 1.5rem;">
+        ${teams.map((t,i) => `<button id="dc-tab-${i}" onclick="switchDCTab(${i})" style="padding:0.5rem 1rem; font-family:'Barlow Condensed',sans-serif; font-size:0.7rem; letter-spacing:0.2em; text-transform:uppercase; border:1px solid rgba(201,169,110,${i===0?'0.6':'0.2'}); background:${i===0?'rgba(201,169,110,0.12)':'transparent'}; color:${i===0?'var(--accent)':'var(--text-muted)'}; cursor:none;">${t}</button>`).join('')}
+      </div>
+      ${teams.map((t,ti) => `
+        <div id="dc-panel-${ti}" style="display:${ti===0?'block':'none'};">
+          ${fields.map(f => `
+            <div style="margin-bottom:1rem;">
+              <div style="font-family:'Barlow Condensed',sans-serif; font-size:0.6rem; letter-spacing:0.3em; text-transform:uppercase; color:var(--accent); margin-bottom:0.4rem;">${f.label}</div>
+              <textarea id="dc-${ti}-${f.id}" placeholder="${f.placeholder}" oninput="saveDC()" style="width:100%; background:rgba(27,77,92,0.25); border:1px solid rgba(201,169,110,0.12); color:var(--text-light); font-family:'Barlow',sans-serif; font-size:0.82rem; padding:0.6rem 0.75rem; resize:vertical; min-height:70px; outline:none; line-height:1.6;"></textarea>
+            </div>
+          `).join('')}
+        </div>
+      `).join('')}
+    </div>`;
+}
+function switchDCTab(i) {
+  for(let t=0;t<4;t++) {
+    const tab=document.getElementById(`dc-tab-${t}`); const panel=document.getElementById(`dc-panel-${t}`);
+    if(tab){tab.style.borderColor=t===i?'rgba(201,169,110,0.6)':'rgba(201,169,110,0.2)'; tab.style.background=t===i?'rgba(201,169,110,0.12)':'transparent'; tab.style.color=t===i?'var(--accent)':'var(--text-muted)';}
+    if(panel) panel.style.display=t===i?'block':'none';
+  }
+}
+function saveDC() { const data={}; for(let t=0;t<4;t++) ['problem','core','ideas','best'].forEach(f=>{data[`${t}-${f}`]=document.getElementById(`dc-${t}-${f}`)?.value;}); window.__northStore['north-dc'] = JSON.stringify(data); }
+function initDC() { const s=JSON.parse(window.__northStore['north-dc']||'{}'); for(let t=0;t<4;t++) ['problem','core','ideas','best'].forEach(f=>{const el=document.getElementById(`dc-${t}-${f}`); if(el) el.value=s[`${t}-${f}`]||'';}); }
+
+// ─── MAP PREP RENDERER ───────────────────────────────────
+function renderMapPrep() {
+  const categories = ['Green Place','Initiative / Organisation','Traditional Practice','Urban Solution','Community Project','Natural Resource'];
+  const teams = ['🇹🇷 Turkey Team','🇪🇸 Spain Team','🇲🇰 N. Macedonia Team','🇷🇸 Serbia Team'];
+  return `
+    <div class="activity-block">
+      <div class="activity-block-label">Interactive Tool · Green Map Entry Preparation</div>
+      <h3>Prepare Your Map Entries</h3>
+      <p>Each team prepares their country's entries before adding them to greenmap.org. Target: minimum 5 entries per country.</p>
+      <div style="display:flex; gap:0.5rem; flex-wrap:wrap; margin:1rem 0 1.5rem;">
+        ${teams.map((t,i)=>`<button id="mp-tab-${i}" onclick="switchMPTab(${i})" style="padding:0.5rem 0.85rem; font-family:'Barlow Condensed',sans-serif; font-size:0.68rem; letter-spacing:0.15em; text-transform:uppercase; border:1px solid rgba(201,169,110,${i===0?'0.6':'0.2'}); background:${i===0?'rgba(201,169,110,0.1)':'transparent'}; color:${i===0?'var(--accent)':'var(--text-muted)'}; cursor:none;">${t}</button>`).join('')}
+      </div>
+      ${teams.map((t,ti)=>`
+        <div id="mp-panel-${ti}" style="display:${ti===0?'flex':'none'}; flex-direction:column; gap:0.75rem;">
+          ${[0,1,2,3,4].map(ei=>`
+            <div style="background:rgba(15,45,56,0.5); border:1px solid rgba(201,169,110,0.1); padding:1rem;">
+              <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:0.5rem; margin-bottom:0.5rem;">
+                <input placeholder="Entry name" id="mp-${ti}-${ei}-name" oninput="saveMP()" style="background:rgba(27,77,92,0.3); border:1px solid rgba(201,169,110,0.12); color:var(--text-light); font-family:'Barlow',sans-serif; font-size:0.78rem; padding:0.5rem 0.65rem; outline:none;">
+                <input placeholder="City / location" id="mp-${ti}-${ei}-loc" oninput="saveMP()" style="background:rgba(27,77,92,0.3); border:1px solid rgba(201,169,110,0.12); color:var(--text-light); font-family:'Barlow',sans-serif; font-size:0.78rem; padding:0.5rem 0.65rem; outline:none;">
+                <select id="mp-${ti}-${ei}-cat" onchange="saveMP()" style="background:rgba(27,77,92,0.3); border:1px solid rgba(201,169,110,0.12); color:var(--text-muted); font-family:'Barlow',sans-serif; font-size:0.75rem; padding:0.5rem; outline:none; cursor:pointer;">
+                  <option value="">Category...</option>
+                  ${categories.map(c=>`<option value="${c}">${c}</option>`).join('')}
+                </select>
+              </div>
+              <textarea placeholder="Why does it belong on a green map? What makes it special?" id="mp-${ti}-${ei}-desc" oninput="saveMP()" style="width:100%; background:rgba(27,77,92,0.2); border:1px solid rgba(201,169,110,0.08); color:var(--text-light); font-family:'Barlow',sans-serif; font-size:0.78rem; padding:0.5rem 0.65rem; resize:vertical; min-height:55px; outline:none; line-height:1.5;"></textarea>
+            </div>
+          `).join('')}
+        </div>
+      `).join('')}
+    </div>`;
+}
+function switchMPTab(i) { for(let t=0;t<4;t++){const tab=document.getElementById(`mp-tab-${t}`);const panel=document.getElementById(`mp-panel-${t}`); if(tab){tab.style.borderColor=t===i?'rgba(201,169,110,0.6)':'rgba(201,169,110,0.2)';tab.style.background=t===i?'rgba(201,169,110,0.1)':'transparent';tab.style.color=t===i?'var(--accent)':'var(--text-muted)';} if(panel)panel.style.display=t===i?'flex':'none';} }
+function saveMP(){const data={};for(let t=0;t<4;t++)for(let e=0;e<5;e++){['name','loc','cat','desc'].forEach(f=>{data[`${t}-${e}-${f}`]=document.getElementById(`mp-${t}-${e}-${f}`)?.value;});}window.__northStore['north-mp']=JSON.stringify(data);}
+function initMP(){const s=JSON.parse(window.__northStore['north-mp']||'{}');for(let t=0;t<4;t++)for(let e=0;e<5;e++){['name','loc','cat','desc'].forEach(f=>{const el=document.getElementById(`mp-${t}-${e}-${f}`);if(el)el.value=s[`${t}-${e}-${f}`]||'';});}}
+
+// ─── ROOM DESIGN RENDERER ────────────────────────────────
+function renderRoomDesign() {
+  const teams = ['🇹🇷 Turkey Room','🇪🇸 Spain Room','🇲🇰 N. Macedonia Room','🇷🇸 Serbia Room'];
+  const fields = [
+    {id:'setting', label:'Setting', placeholder:'Where in your country is the room set? (city, landscape, building...)'},
+    {id:'threat', label:'Environmental threat', placeholder:'What environmental crisis is the player investigating here?'},
+    {id:'enigma', label:'The enigma / puzzle', placeholder:'What challenge must the player solve? It must teach a real green fact.'},
+    {id:'solution', label:'Solution & green fact', placeholder:'What is the answer? What does the player learn about sustainability?'},
+    {id:'unlock', label:'Unlock mechanism', placeholder:'What object, code, or discovery unlocks the next room?'},
+    {id:'visual', label:'Key visual', placeholder:'Describe one image or scene that defines this room\'s atmosphere.'},
+  ];
+  return `
+    <div class="activity-block">
+      <div class="activity-block-label">Interactive Tool · Escape Room Design Template</div>
+      <h3>Design Your Country's Room</h3>
+      <p>Each national team fills in their room. The completed designs will be built in Genially during the afternoon session.</p>
+      <div style="display:flex; gap:0.5rem; flex-wrap:wrap; margin:1rem 0 1.5rem;">
+        ${teams.map((t,i)=>`<button id="rd-tab-${i}" onclick="switchRDTab(${i})" style="padding:0.5rem 0.85rem; font-family:'Barlow Condensed',sans-serif; font-size:0.68rem; letter-spacing:0.15em; text-transform:uppercase; border:1px solid rgba(201,169,110,${i===0?'0.6':'0.2'}); background:${i===0?'rgba(201,169,110,0.1)':'transparent'}; color:${i===0?'var(--accent)':'var(--text-muted)'}; cursor:none;">${t}</button>`).join('')}
+      </div>
+      ${teams.map((t,ti)=>`
+        <div id="rd-panel-${ti}" style="display:${ti===0?'block':'none'};">
+          ${fields.map(f=>`
+            <div style="margin-bottom:0.85rem;">
+              <div style="font-family:'Barlow Condensed',sans-serif; font-size:0.6rem; letter-spacing:0.3em; text-transform:uppercase; color:var(--accent); margin-bottom:0.35rem;">${f.label}</div>
+              <textarea id="rd-${ti}-${f.id}" placeholder="${f.placeholder}" oninput="saveRD()" style="width:100%; background:rgba(27,77,92,0.25); border:1px solid rgba(201,169,110,0.12); color:var(--text-light); font-family:'Barlow',sans-serif; font-size:0.82rem; padding:0.6rem 0.75rem; resize:vertical; min-height:60px; outline:none; line-height:1.6;"></textarea>
+            </div>
+          `).join('')}
+        </div>
+      `).join('')}
+    </div>`;
+}
+function switchRDTab(i){for(let t=0;t<4;t++){const tab=document.getElementById(`rd-tab-${t}`);const panel=document.getElementById(`rd-panel-${t}`);if(tab){tab.style.borderColor=t===i?'rgba(201,169,110,0.6)':'rgba(201,169,110,0.2)';tab.style.background=t===i?'rgba(201,169,110,0.1)':'transparent';tab.style.color=t===i?'var(--accent)':'var(--text-muted)';}if(panel)panel.style.display=t===i?'block':'none';}}
+function saveRD(){const data={};for(let t=0;t<4;t++)['setting','threat','enigma','solution','unlock','visual'].forEach(f=>{data[`${t}-${f}`]=document.getElementById(`rd-${t}-${f}`)?.value;});window.__northStore['north-rd']=JSON.stringify(data);}
+function initRD(){const s=JSON.parse(window.__northStore['north-rd']||'{}');for(let t=0;t<4;t++)['setting','threat','enigma','solution','unlock','visual'].forEach(f=>{const el=document.getElementById(`rd-${t}-${f}`);if(el)el.value=s[`${t}-${f}`]||'';}); }
+
+// ─── CHECKLIST RENDERER ──────────────────────────────────
+function renderChecklist() {
+  const mapChecks = ['Entry has a clear, specific name','Location is accurate and pinned correctly','Category icon is appropriate','Description explains WHY it\'s a green entry','Description is interesting to someone from another country','Photo or image is attached','Entry has been peer-reviewed by another team'];
+  const erChecks = ['Room has a defined setting (place in your country)','Environmental threat is clearly described','Enigma is solvable by someone without prior knowledge','Enigma teaches a real, accurate green fact','Solution and unlock mechanism are clearly linked','Room connects logically to the next country room','Key visual is described or sketched'];
+  return `
+    <div class="activity-block">
+      <div class="activity-block-label">Interactive Tool · Output Quality Checklist</div>
+      <h3>Before You Publish — Quality Check</h3>
+      <p>Each team goes through both checklists for their country's contributions. Check only when the criterion is truly met.</p>
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:1.5rem; margin-top:1.5rem;">
+        <div>
+          <div style="font-family:'Barlow Condensed',sans-serif; font-size:0.65rem; letter-spacing:0.3em; text-transform:uppercase; color:var(--accent); margin-bottom:1rem;">🗺️ Green Map Entries</div>
+          ${mapChecks.map((c,i)=>`
+            <label style="display:flex; align-items:flex-start; gap:0.75rem; margin-bottom:0.75rem; cursor:none;">
+              <input type="checkbox" id="mc-${i}" style="margin-top:2px; accent-color:var(--secondary); cursor:pointer;">
+              <span style="font-family:'Barlow',sans-serif; font-size:0.8rem; color:var(--text-muted); line-height:1.5;">${c}</span>
+            </label>
+          `).join('')}
+        </div>
+        <div>
+          <div style="font-family:'Barlow Condensed',sans-serif; font-size:0.65rem; letter-spacing:0.3em; text-transform:uppercase; color:var(--accent); margin-bottom:1rem;">🎮 Escape Room Design</div>
+          ${erChecks.map((c,i)=>`
+            <label style="display:flex; align-items:flex-start; gap:0.75rem; margin-bottom:0.75rem; cursor:none;">
+              <input type="checkbox" id="ec-${i}" style="margin-top:2px; accent-color:var(--secondary); cursor:pointer;">
+              <span style="font-family:'Barlow',sans-serif; font-size:0.8rem; color:var(--text-muted); line-height:1.5;">${c}</span>
+            </label>
+          `).join('')}
+        </div>
+      </div>
+      <div id="checklist-summary" style="margin-top:1.5rem; padding:1rem; background:rgba(27,77,92,0.2); border:1px solid rgba(201,169,110,0.15); font-family:'Barlow',sans-serif; font-size:0.82rem; color:var(--text-muted); text-align:center;">
+        Complete the checklists above to see your readiness score.
+      </div>
+    </div>`;
+}
+
+// ─── DISSEMINATION CANVAS ────────────────────────────────
+function renderDissemination() {
+  const teams = ['🇹🇷 Turkey','🇪🇸 Spain','🇲🇰 N. Macedonia','🇷🇸 Serbia'];
+  const fields = [
+    {id:'audiences', label:'Target audiences', placeholder:'Schools, youth centres, local NGOs, social media followers, local government...'},
+    {id:'channels', label:'Channels & platforms', placeholder:'Instagram, WhatsApp, website, events, email newsletter, local press...'},
+    {id:'message', label:'Key message per audience', placeholder:'What is the most relevant angle for each audience? What do you want them to do?'},
+    {id:'timeline', label:'Timeline', placeholder:'Week 1: post on social media. Month 1: present at a local school. Month 3: organise a local awareness event...'},
+    {id:'responsible', label:'Who is responsible', placeholder:'Name the person responsible for each action. Vague plans don\'t get executed.'},
+    {id:'post', label:'First social media post', placeholder:'Draft your first post — the one you\'ll publish the day after you get home. Include the Green Map link.'},
+  ];
+  return `
+    <div class="activity-block">
+      <div class="activity-block-label">Interactive Tool · Dissemination Canvas</div>
+      <h3>Reach Beyond Istanbul</h3>
+      <p>Each national team builds their dissemination plan. Be specific — vague plans stay on paper.</p>
+      <div style="display:flex; gap:0.5rem; flex-wrap:wrap; margin:1rem 0 1.5rem;">
+        ${teams.map((t,i)=>`<button id="dis-tab-${i}" onclick="switchDisTab(${i})" style="padding:0.5rem 0.85rem; font-family:'Barlow Condensed',sans-serif; font-size:0.68rem; letter-spacing:0.15em; text-transform:uppercase; border:1px solid rgba(201,169,110,${i===0?'0.6':'0.2'}); background:${i===0?'rgba(201,169,110,0.1)':'transparent'}; color:${i===0?'var(--accent)':'var(--text-muted)'}; cursor:none;">${t}</button>`).join('')}
+      </div>
+      ${teams.map((t,ti)=>`
+        <div id="dis-panel-${ti}" style="display:${ti===0?'block':'none'};">
+          ${fields.map(f=>`
+            <div style="margin-bottom:0.85rem;">
+              <div style="font-family:'Barlow Condensed',sans-serif; font-size:0.6rem; letter-spacing:0.3em; text-transform:uppercase; color:var(--accent); margin-bottom:0.35rem;">${f.label}</div>
+              <textarea id="dis-${ti}-${f.id}" placeholder="${f.placeholder}" oninput="saveDis()" style="width:100%; background:rgba(27,77,92,0.25); border:1px solid rgba(201,169,110,0.12); color:var(--text-light); font-family:'Barlow',sans-serif; font-size:0.82rem; padding:0.6rem 0.75rem; resize:vertical; min-height:65px; outline:none; line-height:1.6;"></textarea>
+            </div>
+          `).join('')}
+        </div>
+      `).join('')}
+    </div>`;
+}
+function switchDisTab(i){for(let t=0;t<4;t++){const tab=document.getElementById(`dis-tab-${t}`);const panel=document.getElementById(`dis-panel-${t}`);if(tab){tab.style.borderColor=t===i?'rgba(201,169,110,0.6)':'rgba(201,169,110,0.2)';tab.style.background=t===i?'rgba(201,169,110,0.1)':'transparent';tab.style.color=t===i?'var(--accent)':'var(--text-muted)';}if(panel)panel.style.display=t===i?'block':'none';}}
+function saveDis(){const data={};for(let t=0;t<4;t++)['audiences','channels','message','timeline','responsible','post'].forEach(f=>{data[`${t}-${f}`]=document.getElementById(`dis-${t}-${f}`)?.value;});window.__northStore['north-dis']=JSON.stringify(data);}
+function initDis(){const s=JSON.parse(window.__northStore['north-dis']||'{}');for(let t=0;t<4;t++)['audiences','channels','message','timeline','responsible','post'].forEach(f=>{const el=document.getElementById(`dis-${t}-${f}`);if(el)el.value=s[`${t}-${f}`]||'';}); }
+
+// ─── LEGACY WALL ─────────────────────────────────────────
+function renderLegacy() {
+  return `
+    <div class="activity-block">
+      <div class="activity-block-label">Interactive Tool · Legacy Wall</div>
+      <h3>Leave Your Mark</h3>
+      <p>Each participant fills in their card. The wall is exported and sent to all participants after the exchange.</p>
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.75rem; margin-top:1.5rem;" id="legacy-wall">
+        ${Array.from({length:8},(_,i)=>`
+          <div style="background:rgba(27,77,92,0.3); border:1px solid rgba(201,169,110,0.15); padding:1.25rem;">
+            <input placeholder="Your name & country" id="lw-${i}-name" oninput="saveLW()" style="width:100%; background:transparent; border:none; border-bottom:1px solid rgba(201,169,110,0.2); color:var(--accent); font-family:'Barlow Condensed',sans-serif; font-size:0.75rem; letter-spacing:0.15em; padding:0.25rem 0; outline:none; margin-bottom:0.75rem;">
+            <textarea placeholder="My favourite memory..." id="lw-${i}-memory" oninput="saveLW()" style="width:100%; background:rgba(27,77,92,0.2); border:1px solid rgba(201,169,110,0.1); color:var(--text-light); font-family:'Barlow',sans-serif; font-size:0.78rem; padding:0.5rem; resize:none; height:55px; outline:none; margin-bottom:0.5rem; line-height:1.5;"></textarea>
+            <textarea placeholder="My green commitment going home..." id="lw-${i}-commit" oninput="saveLW()" style="width:100%; background:rgba(27,77,92,0.2); border:1px solid rgba(201,169,110,0.1); color:var(--text-light); font-family:'Barlow',sans-serif; font-size:0.78rem; padding:0.5rem; resize:none; height:55px; outline:none; line-height:1.5;"></textarea>
+          </div>
+        `).join('')}
+      </div>
+      <button class="btn-secondary" onclick="copyLW()" style="margin-top:1rem;">Copy Legacy Wall</button>
+    </div>`;
+}
+function saveLW(){const data={};for(let i=0;i<8;i++){['name','memory','commit'].forEach(f=>{data[`${i}-${f}`]=document.getElementById(`lw-${i}-${f}`)?.value;});}window.__northStore['north-lw']=JSON.stringify(data);}
+function initLW(){const s=JSON.parse(window.__northStore['north-lw']||'{}');for(let i=0;i<8;i++){['name','memory','commit'].forEach(f=>{const el=document.getElementById(`lw-${i}-${f}`);if(el)el.value=s[`${i}-${f}`]||'';});}}
+function copyLW(){let text='N.O.R.T.H. LEGACY WALL\n\n';for(let i=0;i<8;i++){const name=document.getElementById(`lw-${i}-name`)?.value;if(name){text+=`${name}\nMemory: ${document.getElementById(`lw-${i}-memory`)?.value||'—'}\nCommitment: ${document.getElementById(`lw-${i}-commit`)?.value||'—'}\n\n`;}}navigator.clipboard.writeText(text).then(()=>alert('Legacy wall copied!'));}
+
+// ─── YOUTHPASS GUIDE ─────────────────────────────────────
+function renderYouthpass() {
+  const competences = [
+    { name:'Literacy', desc:'Communication in mother tongue and foreign languages.', north:'Did you explain sustainability concepts in English? Did you communicate across language barriers?' },
+    { name:'Multilingual', desc:'Using multiple languages in diverse situations.', north:'Did you use your language skills to bridge communication gaps within the group?' },
+    { name:'STEM', desc:'Scientific, mathematical, and digital thinking.', north:'Did you use data (carbon footprint, statistics) to understand environmental issues? Did you use digital tools?' },
+    { name:'Digital', desc:'Confident and critical use of digital technologies.', north:'Did you contribute to the Green Map or Escape Room? Did you use digital tools for collaboration?' },
+    { name:'Personal & social', desc:'Self-management, collaboration, resilience.', north:'How did you contribute to your team? How did you handle cultural differences or conflict?' },
+    { name:'Civic', desc:'Acting as a responsible citizen.', north:'Did you develop a sense of responsibility toward environmental issues beyond your own country?' },
+    { name:'Entrepreneurship', desc:'Turning ideas into action.', north:'Did you design a solution (micro-green, escape room, dissemination plan) and work to make it real?' },
+    { name:'Cultural awareness', desc:'Appreciating cultural diversity and creative expression.', north:'What did you learn about the cultures of the other three countries? How did it change your perspective?' },
+  ];
+  return `
+    <div class="activity-block">
+      <div class="activity-block-label">Interactive Guide · YouthPass Self-Assessment</div>
+      <h3>Your Learning in 8 Competences</h3>
+      <p>For each competence, reflect on how NORTH contributed to your development. Rate your growth and add evidence from specific sessions.</p>
+      <div style="display:flex; flex-direction:column; gap:1rem; margin-top:1.5rem;">
+        ${competences.map((c,i)=>`
+          <div style="background:rgba(15,45,56,0.5); border:1px solid rgba(201,169,110,0.12); padding:1.25rem;">
+            <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:1rem; flex-wrap:wrap;">
+              <div style="flex:1;">
+                <div style="font-family:'Barlow Condensed',sans-serif; font-size:0.65rem; letter-spacing:0.3em; text-transform:uppercase; color:var(--accent); margin-bottom:0.3rem;">Competence ${i+1}</div>
+                <div style="font-family:'Cormorant Garamond',serif; font-size:1.1rem; color:var(--text-light); margin-bottom:0.3rem;">${c.name}</div>
+                <div style="font-family:'Barlow',sans-serif; font-size:0.78rem; color:var(--text-muted); margin-bottom:0.5rem; line-height:1.5;">${c.desc}</div>
+                <div style="font-family:'Barlow',sans-serif; font-size:0.75rem; color:var(--secondary); line-height:1.5; font-style:italic;">💬 ${c.north}</div>
+              </div>
+              <div style="text-align:center;">
+                <div style="font-family:'Barlow Condensed',sans-serif; font-size:0.55rem; letter-spacing:0.2em; text-transform:uppercase; color:var(--text-muted); margin-bottom:0.4rem;">My growth</div>
+                <div style="display:flex; gap:0.3rem;">
+                  ${[1,2,3,4,5].map(n=>`<button id="yp-${i}-${n}" onclick="rateYP(${i},${n})" style="width:28px;height:28px;border:1px solid rgba(201,169,110,0.2);background:rgba(27,77,92,0.3);color:var(--text-muted);font-family:'Barlow',sans-serif;font-size:0.7rem;cursor:none;transition:all 0.3s;">${n}</button>`).join('')}
+                </div>
+              </div>
+            </div>
+            <textarea id="yp-evidence-${i}" placeholder="My evidence: what did I specifically do or learn during NORTH that developed this competence?" oninput="saveYP()" style="width:100%; margin-top:0.75rem; background:rgba(27,77,92,0.2); border:1px solid rgba(201,169,110,0.08); color:var(--text-light); font-family:'Barlow',sans-serif; font-size:0.78rem; padding:0.5rem 0.65rem; resize:vertical; min-height:55px; outline:none; line-height:1.5;"></textarea>
+          </div>
+        `).join('')}
+      </div>
+    </div>`;
+}
+function rateYP(comp,val){for(let n=1;n<=5;n++){const btn=document.getElementById(`yp-${comp}-${n}`);if(btn){btn.style.background=n<=val?'rgba(74,124,111,0.4)':'rgba(27,77,92,0.3)';btn.style.borderColor=n<=val?'rgba(74,124,111,0.6)':'rgba(201,169,110,0.2)';btn.style.color=n<=val?'var(--text-light)':'var(--text-muted)';}}saveYP();}
+function saveYP(){const data={};for(let i=0;i<8;i++){data[`ev-${i}`]=document.getElementById(`yp-evidence-${i}`)?.value;}window.__northStore['north-yp']=JSON.stringify(data);}
+function initYP(){const s=JSON.parse(window.__northStore['north-yp']||'{}');for(let i=0;i<8;i++){const el=document.getElementById(`yp-evidence-${i}`);if(el)el.value=s[`ev-${i}`]||'';}}
+
+// ─── INTERACTIVE DISPATCHER ──────────────────────────────
+function renderInteractive(type) {
+  switch(type) {
+    case 'bingo': return renderBingo();
+    case 'agreement': return renderAgreement();
+    case 'quiz': return renderQuiz();
+    case 'carbon': return renderCarbon();
+    case 'scenario': return renderScenario();
+    case 'gallery': return renderGallery();
+    case 'matrix': return renderMatrix();
+    case 'observation': return renderObservation();
+    case 'istanbul-map': return renderIstanbulMap();
+    case 'design-canvas': return renderDesignCanvas();
+    case 'map-prep': return renderMapPrep();
+    case 'room-design': return renderRoomDesign();
+    case 'checklist': return renderChecklist();
+    case 'dissemination': return renderDissemination();
+    case 'legacy': return renderLegacy();
+    case 'youthpass': return renderYouthpass();
+    default: return '';
+  }
+}
+
+function initInteractive(type) {
+  switch(type) {
+    case 'bingo': initBingo(); break;
+    case 'agreement': initAgreement(); break;
+    case 'quiz': initQuiz(); break;
+    case 'scenario': initScenario(); break;
+    case 'gallery': initGallery(); break;
+    case 'observation': initObs(); break;
+    case 'design-canvas': initDC(); break;
+    case 'map-prep': initMP(); break;
+    case 'room-design': initRD(); break;
+    case 'dissemination': initDis(); break;
+    case 'legacy': initLW(); break;
+    case 'youthpass': initYP(); break;
+  }
+}
+
+// ─── DAILY EVALUATION WIDGET ─────────────────────────────
+function renderEvaluation(dayNum, slot) {
+  const isLastOfDay = slot === 'PM';
+  if (!isLastOfDay) return '';
+  const emojis = ['😔','😐','🙂','😊','🤩'];
+  const labels = ['Difficult','OK','Good','Great','Amazing'];
+  return `
+    <div style="margin-top:2.5rem; border-top:1px solid rgba(201,169,110,0.12); padding-top:2rem;">
+      <div style="font-family:'Barlow Condensed',sans-serif; font-size:0.65rem; letter-spacing:0.35em; text-transform:uppercase; color:var(--accent); margin-bottom:1.25rem; display:flex; align-items:center; gap:0.75rem;">
+        <span style="width:20px; height:1px; background:var(--accent); display:inline-block;"></span>
+        Daily Evaluation — Day ${dayNum}
+      </div>
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:1.25rem; margin-bottom:1.25rem;">
+        <div style="background:rgba(27,77,92,0.2); border:1px solid rgba(201,169,110,0.12); padding:1.25rem;">
+          <div style="font-family:'Barlow Condensed',sans-serif; font-size:0.6rem; letter-spacing:0.25em; text-transform:uppercase; color:var(--accent); margin-bottom:0.85rem;">How was your day?</div>
+          <div style="display:flex; gap:0.5rem; justify-content:space-between;">
+            ${emojis.map((e,i) => `
+              <button id="eval-mood-${dayNum}-${i}" onclick="selectMood(${dayNum},${i})"
+                style="flex:1; padding:0.5rem 0; background:rgba(27,77,92,0.3); border:1px solid rgba(201,169,110,0.12); cursor:none; transition:all 0.3s; display:flex; flex-direction:column; align-items:center; gap:0.25rem;">
+                <span style="font-size:1.3rem;">${e}</span>
+                <span style="font-family:'Barlow Condensed',sans-serif; font-size:0.55rem; letter-spacing:0.15em; text-transform:uppercase; color:var(--text-muted);">${labels[i]}</span>
+              </button>
+            `).join('')}
+          </div>
+        </div>
+        <div style="background:rgba(27,77,92,0.2); border:1px solid rgba(201,169,110,0.12); padding:1.25rem;">
+          <div style="font-family:'Barlow Condensed',sans-serif; font-size:0.6rem; letter-spacing:0.25em; text-transform:uppercase; color:var(--accent); margin-bottom:0.85rem;">Energy level</div>
+          <div style="display:flex; flex-direction:column; gap:0.5rem;">
+            <input type="range" id="eval-energy-${dayNum}" min="1" max="10" value="5"
+              style="width:100%; accent-color:var(--accent); cursor:pointer;"
+              oninput="document.getElementById('eval-energy-val-${dayNum}').textContent=this.value; saveEval(${dayNum})">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <span style="font-family:'Barlow Condensed',sans-serif; font-size:0.6rem; color:var(--text-muted);">Exhausted</span>
+              <span id="eval-energy-val-${dayNum}" style="font-family:'Cormorant Garamond',serif; font-size:1.5rem; color:var(--accent);">5</span>
+              <span style="font-family:'Barlow Condensed',sans-serif; font-size:0.6rem; color:var(--text-muted);">Energised</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:1rem; margin-bottom:1rem;">
+        <div>
+          <div style="font-family:'Barlow Condensed',sans-serif; font-size:0.6rem; letter-spacing:0.25em; text-transform:uppercase; color:var(--accent); margin-bottom:0.4rem;">Rose 🌹</div>
+          <textarea id="eval-rose-${dayNum}" placeholder="Something that went well today..." oninput="saveEval(${dayNum})"
+            style="width:100%; background:rgba(27,77,92,0.25); border:1px solid rgba(201,169,110,0.1); color:var(--text-light); font-family:'Barlow',sans-serif; font-size:0.78rem; padding:0.6rem; resize:none; height:80px; outline:none; line-height:1.5;"></textarea>
+        </div>
+        <div>
+          <div style="font-family:'Barlow Condensed',sans-serif; font-size:0.6rem; letter-spacing:0.25em; text-transform:uppercase; color:var(--accent); margin-bottom:0.4rem;">Thorn 🌵</div>
+          <textarea id="eval-thorn-${dayNum}" placeholder="Something that was difficult..." oninput="saveEval(${dayNum})"
+            style="width:100%; background:rgba(27,77,92,0.25); border:1px solid rgba(201,169,110,0.1); color:var(--text-light); font-family:'Barlow',sans-serif; font-size:0.78rem; padding:0.6rem; resize:none; height:80px; outline:none; line-height:1.5;"></textarea>
+        </div>
+        <div>
+          <div style="font-family:'Barlow Condensed',sans-serif; font-size:0.6rem; letter-spacing:0.25em; text-transform:uppercase; color:var(--accent); margin-bottom:0.4rem;">Bud 🌱</div>
+          <textarea id="eval-bud-${dayNum}" placeholder="Something I want to explore more..." oninput="saveEval(${dayNum})"
+            style="width:100%; background:rgba(27,77,92,0.25); border:1px solid rgba(201,169,110,0.1); color:var(--text-light); font-family:'Barlow',sans-serif; font-size:0.78rem; padding:0.6rem; resize:none; height:80px; outline:none; line-height:1.5;"></textarea>
+        </div>
+      </div>
+      <div id="eval-saved-${dayNum}" style="font-family:'Barlow Condensed',sans-serif; font-size:0.6rem; letter-spacing:0.2em; text-transform:uppercase; color:var(--secondary); opacity:0; transition:opacity 0.5s;">✓ Saved</div>
+    </div>`;
+}
+
+function selectMood(day, idx) {
+  for(let i=0;i<5;i++) {
+    const btn = document.getElementById(`eval-mood-${day}-${i}`);
+    if(btn) { btn.style.background = i===idx ? 'rgba(201,169,110,0.15)' : 'rgba(27,77,92,0.3)'; btn.style.borderColor = i===idx ? 'rgba(201,169,110,0.5)' : 'rgba(201,169,110,0.12)'; }
+  }
+  saveEval(day, idx);
+}
+
+function saveEval(day, mood) {
+  const data = JSON.parse(window.__northStore['north-eval'] || '{}');
+  data[day] = {
+    mood: mood !== undefined ? mood : (data[day]?.mood),
+    energy: document.getElementById(`eval-energy-${day}`)?.value,
+    rose: document.getElementById(`eval-rose-${day}`)?.value,
+    thorn: document.getElementById(`eval-thorn-${day}`)?.value,
+    bud: document.getElementById(`eval-bud-${day}`)?.value,
+  };
+  window.__northStore['north-eval'] = JSON.stringify(data);
+  const saved = document.getElementById(`eval-saved-${day}`);
+  if(saved) { saved.style.opacity='1'; setTimeout(()=>saved.style.opacity='0', 1500); }
+}
+
+function initEval(day) {
+  const data = JSON.parse(window.__northStore['north-eval'] || '{}');
+  const d = data[day];
+  if(!d) return;
+  if(d.mood !== undefined) selectMood(day, d.mood);
+  ['energy','rose','thorn','bud'].forEach(f => {
+    const el = document.getElementById(`eval-${f}-${day}`);
+    if(el && d[f] !== undefined) {
+      el.value = d[f];
+      if(f==='energy') document.getElementById(`eval-energy-val-${day}`).textContent = d[f];
+    }
+  });
+}
+
+// ─── SESSION NAVIGATION ───────────────────────────────────
+const sessionOrder = [
+  '1-AM','1-PM','2-AM','2-PM','3-AM','3-PM',
+  '4-AM','4-PM','5-AM','5-PM','6-AM','6-PM',
+  '7-AM','7-PM','8-AM','8-PM','9-AM','9-PM'
+];
+
+function renderSessionNav(dayNum, slot) {
+  const key = `${dayNum}-${slot}`;
+  const idx = sessionOrder.indexOf(key);
+  const prev = idx > 0 ? sessionOrder[idx-1] : null;
+  const next = idx < sessionOrder.length-1 ? sessionOrder[idx+1] : null;
+  const parseKey = k => ({ day: parseInt(k.split('-')[0]), slot: k.split('-')[1] });
+
+  return `
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-top:3rem; padding-top:1.5rem; border-top:1px solid rgba(201,169,110,0.1);">
+      <div>
+        ${prev ? `<button onclick="showSession(${parseKey(prev).day},'${parseKey(prev).slot}')"
+          style="background:transparent; border:1px solid rgba(201,169,110,0.2); color:var(--text-muted); font-family:'Barlow Condensed',sans-serif; font-size:0.7rem; letter-spacing:0.2em; text-transform:uppercase; padding:0.6rem 1.25rem; cursor:none; transition:all 0.3s;"
+          onmouseover="this.style.borderColor='rgba(201,169,110,0.5)';this.style.color='var(--accent)'"
+          onmouseout="this.style.borderColor='rgba(201,169,110,0.2)';this.style.color='var(--text-muted)'">
+          ← Previous
+        </button>` : '<div></div>'}
+      </div>
+      <button onclick="showScreen('programme')"
+        style="background:transparent; border:none; color:var(--text-muted); font-family:'Barlow Condensed',sans-serif; font-size:0.65rem; letter-spacing:0.3em; text-transform:uppercase; cursor:none; transition:color 0.3s;"
+        onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--text-muted)'">
+        All Days
+      </button>
+      <div>
+        ${next ? `<button onclick="showSession(${parseKey(next).day},'${parseKey(next).slot}')"
+          style="background:rgba(201,169,110,0.1); border:1px solid rgba(201,169,110,0.3); color:var(--accent); font-family:'Barlow Condensed',sans-serif; font-size:0.7rem; letter-spacing:0.2em; text-transform:uppercase; padding:0.6rem 1.25rem; cursor:none; transition:all 0.3s;"
+          onmouseover="this.style.background='rgba(201,169,110,0.2)'"
+          onmouseout="this.style.background='rgba(201,169,110,0.1)'">
+          Next →
+        </button>` : '<div></div>'}
+      </div>
+    </div>`;
+}
+
+// ─── CUSTOM CURSOR ───────────────────────────────────────
+const cursor = document.getElementById('cursor');
+const ring = document.getElementById('cursorRing');
+let mx = 0, my = 0, rx = 0, ry = 0;
+
+document.addEventListener('mousemove', e => {
+  mx = e.clientX; my = e.clientY;
+  cursor.style.left = mx + 'px';
+  cursor.style.top = my + 'px';
+});
+
+function animateRing() {
+  rx += (mx - rx) * 0.12;
+  ry += (my - ry) * 0.12;
+  ring.style.left = rx + 'px';
+  ring.style.top = ry + 'px';
+  requestAnimationFrame(animateRing);
+}
+animateRing();
+
+document.querySelectorAll('button, .day-card, .day-session-item, .enter-btn').forEach(el => {
+  el.addEventListener('mouseenter', () => {
+    cursor.style.transform = 'translate(-50%, -50%) scale(2)';
+    ring.style.transform = 'translate(-50%, -50%) scale(1.5)';
+    ring.style.borderColor = 'rgba(201,169,110,0.7)';
+  });
+  el.addEventListener('mouseleave', () => {
+    cursor.style.transform = 'translate(-50%, -50%) scale(1)';
+    ring.style.transform = 'translate(-50%, -50%) scale(1)';
+    ring.style.borderColor = 'rgba(201,169,110,0.4)';
+  });
+});
+
+// ─── INIT ────────────────────────────────────────────────
+renderDays();
+</script>
+</body>
+</html>
