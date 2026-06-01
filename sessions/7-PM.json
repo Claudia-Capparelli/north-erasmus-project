@@ -1,0 +1,34 @@
+{
+  "label": "Day 7 — Afternoon: Finalizing Outputs",
+  "description": "Finalisation and quality check for both outputs. Teams complete their Green Map entries, refine their Escape Room designs, and conduct a structured peer review of each other's work before publication.",
+  "objectives": [
+    "Complete all Green Map entries to publication standard",
+    "Finalise all four Escape Room room designs",
+    "Conduct meaningful peer review using agreed quality criteria",
+    "Prepare both outputs for official publication/submission"
+  ],
+  "steps": [
+    {
+      "time": "10 min",
+      "title": "Quality checklist briefing",
+      "body": "Facilitator presents the two quality checklists (one for the Green Map, one for the Escape Room). Teams understand exactly what 'done' looks like before they start."
+    },
+    {
+      "time": "30 min",
+      "title": "Finalisation sprint",
+      "body": "Teams work on their outputs simultaneously: completing missing Green Map entries, polishing room design documents. Facilitator and group leaders circulate to support."
+    },
+    {
+      "time": "20 min",
+      "title": "Cross-team peer review",
+      "body": "Teams rotate: Team A reviews Team B's map entries + Team B reviews Team A's room design. Feedback is structured: one thing strong / one thing that could be clearer / one question I have."
+    },
+    {
+      "time": "20 min",
+      "title": "Final revisions & sign-off",
+      "body": "Teams incorporate feedback and make final adjustments. Facilitator officially marks both outputs as 'ready for publication.' Group celebrates with a brief round: one word for what we created this week."
+    }
+  ],
+  "facilitatorNote": "Don't let the peer review become polite and superficial. Push teams to give honest, specific feedback. The publication moment at the end should feel ceremonial — mark it.",
+  "interactive": "checklist"
+}

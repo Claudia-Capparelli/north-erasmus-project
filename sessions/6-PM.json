@@ -1,0 +1,34 @@
+{
+  "label": "Day 6 — Afternoon: Green Map Workshop",
+  "description": "The first dedicated output-building session. Teams begin populating the N.O.R.T.H. Green Map — the project's main output — using greenmap.org. Each national team is responsible for their country's entries.",
+  "objectives": [
+    "Understand the Green Map System platform and its global context",
+    "Curate and structure green practice entries for each partner country",
+    "Begin populating the official N.O.R.T.H. map on greenmap.org",
+    "Establish quality standards for map entries across all teams"
+  ],
+  "steps": [
+    {
+      "time": "15 min",
+      "title": "Green Map System briefing",
+      "body": "Facilitator walks through greenmap.org: what it is, the 475 existing maps, the icon system, how entries work. Shows a strong example map for inspiration."
+    },
+    {
+      "time": "10 min",
+      "title": "Entry quality standards",
+      "body": "Together, the group defines what makes a strong map entry: clear location, photo, description, why it matters, who can visit/engage. A template is agreed and pinned on screen for reference."
+    },
+    {
+      "time": "40 min",
+      "title": "Mapping sprint",
+      "body": "Teams use the preparation sheet below to structure their entries before entering them on the live platform. Each team targets a minimum of 5 entries from their country."
+    },
+    {
+      "time": "15 min",
+      "title": "Peer review round",
+      "body": "Teams swap preparation sheets and give feedback: Is the entry clear? Is it interesting to someone from another country? Is the location accurate?"
+    }
+  ],
+  "facilitatorNote": "Create the greenmap.org account and project space before Day 6 — don't do it live in front of the group. Test the entry process with a dummy entry. The biggest risk in this session is technical friction killing momentum — pre-solve every technical issue.",
+  "interactive": "map-prep"
+}

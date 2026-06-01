@@ -1,0 +1,34 @@
+{
+  "label": "Day 8 — Morning: Dissemination Planning",
+  "description": "Creating something is not enough — it needs to reach people. This session equips each national team with a concrete, realistic dissemination plan: who they will share their outputs with, through which channels, by when, and with what message.",
+  "objectives": [
+    "Develop a concrete dissemination plan for each partner country",
+    "Identify target audiences and appropriate channels for each context",
+    "Craft key messages that make the outputs relevant to different audiences",
+    "Establish commitments for post-project follow-up and network maintenance"
+  ],
+  "steps": [
+    {
+      "time": "10 min",
+      "title": "Why dissemination fails",
+      "body": "Honest conversation: most project outputs sit unseen on Erasmus+ Results Platform. Why? No clear audience, no follow-up plan, no champion. Today we make sure NORTH doesn't become another forgotten PDF."
+    },
+    {
+      "time": "35 min",
+      "title": "Dissemination Canvas",
+      "body": "Each team plans their dissemination: Target audiences, Channels, Key messages per audience, Timeline, and who is responsible for each action."
+    },
+    {
+      "time": "25 min",
+      "title": "Communication pack",
+      "body": "Teams draft their core social media post about the project — the one they will publish the day after returning home. They also agree on shared hashtags and a common description of the project."
+    },
+    {
+      "time": "10 min",
+      "title": "Network commitments",
+      "body": "Each participant makes one specific, measurable commitment: 'By [date], I will [action] to share [output] with [audience].' Written in the interactive tool — shared with the group and followed up by email in 30 days."
+    }
+  ],
+  "facilitatorNote": "Make the dissemination canvas as concrete as possible. 'Post on social media' is not a plan. 'Post a reel on our organisation's Instagram on 15 June with the Green Map link, tagging the three local schools we work with' is a plan. Push every team toward this level of specificity.",
+  "interactive": "dissemination"
+}

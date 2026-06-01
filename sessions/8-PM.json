@@ -1,0 +1,34 @@
+{
+  "label": "Day 8 — Afternoon: Farewell Networking & Legacy Wall",
+  "description": "The final evening programme — a space for genuine connection, gratitude, and forward-looking energy. Not a formal ceremony but a human gathering: participants share what they are taking home, leave messages for each other, and celebrate what they built together.",
+  "objectives": [
+    "Create space for genuine emotional closure and gratitude",
+    "Celebrate the collective work and outputs of the exchange",
+    "Build a lasting digital memory of the group",
+    "Strengthen individual connections across the four countries"
+  ],
+  "steps": [
+    {
+      "time": "20 min",
+      "title": "The giving circle",
+      "body": "Participants stand in a circle. Each person gives a genuine compliment or observation to ONE other person in the group. The rule: it must be specific, not generic."
+    },
+    {
+      "time": "30 min",
+      "title": "Legacy Wall",
+      "body": "Using the interactive wall below, each participant contributes: one memory from the week, one thing they learned, one green commitment they are taking home, and their contact. The wall is exported as a PDF and shared with all participants."
+    },
+    {
+      "time": "30 min",
+      "title": "Farewell dinner & free connection",
+      "body": "Dinner together, music, no structure. This is the most important part — don't programme it. Just protect the time and the space."
+    },
+    {
+      "time": "10 min",
+      "title": "Tomorrow's logistics",
+      "body": "Brief practical info about Day 9: timing, luggage, check-out, YouthPass session. Keep it short — don't kill the atmosphere."
+    }
+  ],
+  "facilitatorNote": "The giving circle is one of the most powerful tools in a youth exchange — but only if you insist on specificity. The first few rounds will be generic; gently push back each time until the quality shifts.",
+  "interactive": "legacy"
+}

@@ -1,0 +1,34 @@
+{
+  "label": "Day 7 — Morning: Digital Escape Room Co-design",
+  "description": "The most creative session of the exchange. Teams co-design the Digital Escape Room — the project's secondary output — built around the sustainability theme and structured as four 'rooms', one per country.",
+  "objectives": [
+    "Understand the structure and logic of a digital escape room",
+    "Co-design a country-specific room with narrative, enigma, and solution",
+    "Connect local green practices to engaging interactive content",
+    "Produce room design documents ready for Genially implementation"
+  ],
+  "steps": [
+    {
+      "time": "15 min",
+      "title": "Escape Room anatomy",
+      "body": "Facilitator walks through the structure: setting/narrative → clue/challenge → solution → unlock. Shows a 2-minute demo of an existing Genially escape room."
+    },
+    {
+      "time": "10 min",
+      "title": "The NORTH Escape Room concept",
+      "body": "Group agrees on the overarching narrative: 'You are an environmental detective crossing Europe on a mission to stop a corporation from burying toxic waste in four countries. Each country holds a clue.'"
+    },
+    {
+      "time": "45 min",
+      "title": "Room design sprint",
+      "body": "Each national team designs their room: setting (where in their country?), narrative hook, the enigma (puzzle based on a real green fact), the solution and unlock mechanism, and one visual element."
+    },
+    {
+      "time": "10 min",
+      "title": "Room previews",
+      "body": "Each team presents their room concept in 2 minutes. Group votes on one element they love and one suggestion for improvement."
+    }
+  ],
+  "facilitatorNote": "The narrative frame ('environmental detective') makes the design process much easier because it gives teams a consistent logic to work within. Real stories — a polluted river, a disappearing forest, a community garden — always produce better enigmas than invented ones.",
+  "interactive": "room-design"
+}

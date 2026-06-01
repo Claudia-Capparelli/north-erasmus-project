@@ -1,0 +1,150 @@
+backend:
+  name: git-gateway
+  branch: main
+
+locale: it
+
+media_folder: images
+public_folder: /images
+
+collections:
+
+  # ── INFORMAZIONI GENERALI ─────────────────────────────────
+  - name: "progetto"
+    label: "📋 Informazioni Progetto"
+    files:
+      - name: "general"
+        label: "Info Generali + Programma"
+        file: "content.json"
+        format: "json"
+        fields:
+
+          - label: "Testo in cima (home)"
+            name: eyebrow
+            widget: string
+            hint: "Es: Erasmus+ Youth Exchange · Istanbul, Türkiye · June 2026"
+
+          - label: "Date del progetto"
+            name: dates
+            widget: string
+            hint: "Es: 1 – 9 June 2026 · Istanbul"
+
+          - label: "Paesi partner"
+            name: countries
+            widget: string
+            hint: "Es: Türkiye · Spain · North Macedonia · Serbia"
+
+          - label: "Numero partecipanti"
+            name: participants
+            widget: string
+
+          - label: "Output del progetto"
+            name: outputs
+            widget: string
+            hint: "Es: Green Map · Escape Room"
+
+          - label: "Tipo di programma"
+            name: programmeType
+            widget: string
+            hint: "Es: Erasmus+ KA1 Youth Exchange"
+
+          - label: "Programma — 9 Giornate"
+            name: programme
+            widget: list
+            summary: "Giorno {{fields.day}} — {{fields.theme}}"
+            fields:
+
+              - label: "N. giorno"
+                name: day
+                widget: number
+                value_type: int
+
+              - label: "Data"
+                name: date
+                widget: string
+                hint: "Es: Mon 1 June"
+
+              - label: "Tema del giorno"
+                name: theme
+                widget: string
+
+              - label: "Serata"
+                name: evening
+                widget: string
+                hint: "Es: 🌙 Free evening"
+
+              - label: "Sessioni"
+                name: sessions
+                widget: list
+                summary: "{{fields.slot}} — {{fields.name}}"
+                fields:
+
+                  - label: "Slot"
+                    name: slot
+                    widget: select
+                    options: ["AM", "PM"]
+
+                  - label: "Nome sessione"
+                    name: name
+                    widget: string
+
+                  - label: "Durata"
+                    name: duration
+                    widget: string
+                    hint: "Es: 90 min oppure —"
+
+                  - label: "Metodo"
+                    name: method
+                    widget: string
+
+                  - label: "Strumenti"
+                    name: tools
+                    widget: string
+
+  # ── CONTENUTO SESSIONI ───────────────────────────────────
+  - name: "sessioni"
+    label: "📅 Sessioni"
+    folder: "sessions"
+    format: "json"
+    create: false
+    identifier_field: "label"
+    summary: "{{label}}"
+    fields:
+
+      - label: "Nome sessione (per navigazione CMS)"
+        name: label
+        widget: string
+
+      - label: "Descrizione"
+        name: description
+        widget: text
+        hint: "Testo descrittivo che appare in cima alla pagina della sessione"
+
+      - label: "Obiettivi"
+        name: objectives
+        widget: list
+        field:
+          label: "Obiettivo"
+          name: objective
+          widget: string
+
+      - label: "Fasi della sessione"
+        name: steps
+        widget: list
+        summary: "{{fields.time}} — {{fields.title}}"
+        fields:
+          - label: "Tempo"
+            name: time
+            widget: string
+            hint: "Es: 10 min"
+          - label: "Titolo fase"
+            name: title
+            widget: string
+          - label: "Descrizione fase"
+            name: body
+            widget: text
+
+      - label: "Nota per il facilitatore"
+        name: facilitatorNote
+        widget: text
+        hint: "Visibile solo ai facilitatori — consigli pratici per gestire la sessione"

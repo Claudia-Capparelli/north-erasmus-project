@@ -1,0 +1,82 @@
+{
+  "eyebrow": "Erasmus+ Youth Exchange · Istanbul, Türkiye · June 2026",
+  "dates": "1 – 9 June 2026 · Istanbul",
+  "countries": "Türkiye · Spain · North Macedonia · Serbia",
+  "participants": "32",
+  "outputs": "Green Map · Escape Room",
+  "programmeType": "Erasmus+ KA1 Youth Exchange",
+  "programme": [
+    {
+      "day": 1, "date": "Mon 1 June", "theme": "Arrivals & Welcome",
+      "sessions": [
+        {"slot": "AM", "name": "Arrivals & Orientation", "duration": "—", "method": "Logistics", "tools": "—"},
+        {"slot": "PM", "name": "Name Games & Icebreakers", "duration": "90 min", "method": "Non-formal games", "tools": "Interactive HTML"}
+      ],
+      "evening": "🌙 Free evening"
+    },
+    {
+      "day": 2, "date": "Tue 2 June", "theme": "Getting to Know Each Other",
+      "sessions": [
+        {"slot": "AM", "name": "Team Building & Group Agreements", "duration": "90 min", "method": "Collaborative activities", "tools": "Interactive HTML · Padlet"},
+        {"slot": "PM", "name": "Environmental Awareness Workshop", "duration": "90 min", "method": "Quiz · Drag & drop", "tools": "Interactive HTML · Kahoot"}
+      ],
+      "evening": "🌙 Social Night"
+    },
+    {
+      "day": 3, "date": "Wed 3 June", "theme": "What is Sustainability?",
+      "sessions": [
+        {"slot": "AM", "name": "Sustainable Lifestyles — Where Are We Now?", "duration": "90 min", "method": "Carbon footprint calculator", "tools": "Interactive HTML"},
+        {"slot": "PM", "name": "Green Habits in Daily Life", "duration": "90 min", "method": "Scenario-based choices", "tools": "Interactive HTML · Mentimeter"}
+      ],
+      "evening": "🌙 Cultural Night"
+    },
+    {
+      "day": 4, "date": "Thu 4 June", "theme": "Green Habits & Creative Recycling",
+      "sessions": [
+        {"slot": "AM", "name": "Creative Recycling Workshop", "duration": "90 min", "method": "Hands-on + documentation", "tools": "Interactive HTML · Gallery"},
+        {"slot": "PM", "name": "Low-Carbon Lifestyle", "duration": "90 min", "method": "Comparative country activity", "tools": "Interactive HTML · Mentimeter"}
+      ],
+      "evening": "🌙 Intercultural Game Night"
+    },
+    {
+      "day": 5, "date": "Fri 5 June", "theme": "Nature & the City",
+      "sessions": [
+        {"slot": "AM", "name": "Institutional Visit", "duration": "—", "method": "Guided visit + observation", "tools": "Observation sheet HTML"},
+        {"slot": "PM", "name": "Discovering Istanbul", "duration": "—", "method": "Free exploration", "tools": "Istanbul Green Map HTML"}
+      ],
+      "evening": "🌙 Free evening"
+    },
+    {
+      "day": 6, "date": "Sat 6 June", "theme": "Micro-Green Solutions",
+      "sessions": [
+        {"slot": "AM", "name": "Micro-Green Solutions Workshop", "duration": "90 min", "method": "Design Thinking canvas", "tools": "Interactive HTML · Miro"},
+        {"slot": "PM", "name": "Green Map Workshop", "duration": "90 min", "method": "Collaborative mapping", "tools": "GreenMap.org · Interactive HTML"}
+      ],
+      "evening": "🌙 Karaoke / Talent Night"
+    },
+    {
+      "day": 7, "date": "Sun 7 June", "theme": "Building the Outputs",
+      "sessions": [
+        {"slot": "AM", "name": "Digital Escape Room — Co-design", "duration": "90 min", "method": "Creative team design", "tools": "Genially · Interactive HTML"},
+        {"slot": "PM", "name": "Finalizing Outputs", "duration": "90 min", "method": "Peer review + finalization", "tools": "Checklist HTML · Genially · GreenMap.org"}
+      ],
+      "evening": "🌙 Cultural Evening"
+    },
+    {
+      "day": 8, "date": "Mon 8 June", "theme": "Dissemination & Farewell",
+      "sessions": [
+        {"slot": "AM", "name": "Dissemination Planning & Communication Strategies", "duration": "90 min", "method": "Strategy canvas", "tools": "Interactive HTML · Canva"},
+        {"slot": "PM", "name": "Farewell Networking", "duration": "90 min", "method": "Legacy wall", "tools": "Interactive HTML · Padlet"}
+      ],
+      "evening": "🌙 Farewell Dinner"
+    },
+    {
+      "day": 9, "date": "Tue 9 June", "theme": "Closing Day",
+      "sessions": [
+        {"slot": "AM", "name": "Intro to Erasmus+ · YouthPass Filling · Final Evaluation", "duration": "120 min", "method": "Self-assessment · Reflection", "tools": "Interactive HTML · YouthPass platform"},
+        {"slot": "PM", "name": "YouthPass Ceremony & Departures", "duration": "—", "method": "Ceremony", "tools": "—"}
+      ],
+      "evening": "✈️ Departures"
+    }
+  ]
+}

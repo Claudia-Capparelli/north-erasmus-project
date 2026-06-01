@@ -1,0 +1,28 @@
+{
+  "label": "Day 9 — Afternoon: YouthPass Ceremony & Departures",
+  "description": "The YouthPass ceremony and departures. A brief, warm, dignified moment of recognition before participants head to the airport. Simple, human, memorable.",
+  "objectives": [
+    "Formally recognise each participant's learning journey",
+    "Create a lasting final memory of the exchange",
+    "Ensure smooth and stress-free departure logistics"
+  ],
+  "steps": [
+    {
+      "time": "20 min",
+      "title": "YouthPass Ceremony",
+      "body": "Each participant receives their YouthPass certificate. Facilitators say one personal word for each participant as they collect it. Group photo. Brief closing words from group leaders."
+    },
+    {
+      "time": "10 min",
+      "title": "Final group photo & goodbyes",
+      "body": "Informal time for last hugs, photo exchanges, contact sharing. No rush."
+    },
+    {
+      "time": "—",
+      "title": "Departures",
+      "body": "Transfer to airport/station in coordinated groups. Facilitators available until the last participant departs."
+    }
+  ],
+  "facilitatorNote": "Keep the ceremony short and personal — quality over length. The personal word for each participant (even just one sentence) makes all the difference. Prepare these in advance: you will not be in the right headspace to improvise on the last day.",
+  "interactive": null
+}

@@ -1,0 +1,34 @@
+{
+  "label": "Day 4 — Afternoon: Low-Carbon Lifestyle",
+  "description": "A comparative session examining how low-carbon choices play out differently across the four partner countries. Using a matrix of lifestyle areas and country contexts, participants map where change is easiest, hardest, and most impactful.",
+  "objectives": [
+    "Map low-carbon lifestyle options across four different national contexts",
+    "Identify structural vs individual barriers to sustainable living",
+    "Compare policy landscapes and their effect on individual choice",
+    "Build a shared analysis that feeds into the Day 6 solution design work"
+  ],
+  "steps": [
+    {
+      "time": "15 min",
+      "title": "The Low-Carbon Matrix intro",
+      "body": "Facilitator presents the matrix framework: 6 lifestyle areas (food, transport, energy, consumption, waste, travel) × 4 countries. The question for each cell: how easy is it to make the low-carbon choice here, and why?"
+    },
+    {
+      "time": "40 min",
+      "title": "Country expert panels",
+      "body": "National groups (all participants from one country together) become expert panels for their country. They fill in their column of the matrix using the interactive tool below, drawing on their real experience. They must also identify one policy that helps and one that hinders."
+    },
+    {
+      "time": "20 min",
+      "title": "Cross-country comparison",
+      "body": "Panels present their column. The completed matrix is visible on screen. Group analysis: where are the biggest differences? What explains them? Is there a country that seems to have got something right that others could learn from?"
+    },
+    {
+      "time": "15 min",
+      "title": "The policy wishlist",
+      "body": "Each participant writes one policy change that would make the biggest difference to sustainable living in their country. Collected anonymously — displayed as a collective wishlist that will inform the Dissemination session."
+    }
+  ],
+  "facilitatorNote": "This session can become political — that's fine and even desirable. But keep the tone constructive: 'what would need to change' rather than 'who is to blame'. The policy wishlist is particularly powerful when participants from different countries realise they share the same frustrations.",
+  "interactive": "matrix"
+}

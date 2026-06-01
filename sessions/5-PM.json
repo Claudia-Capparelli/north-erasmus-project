@@ -1,0 +1,29 @@
+{
+  "label": "Day 5 — Afternoon: Discovering Istanbul",
+  "description": "A free afternoon to explore Istanbul — guided by a curated green lens. Participants receive a suggested route connecting sustainability-relevant spots in the city. No formal structure — just curiosity and discovery.",
+  "objectives": [
+    "Experience Istanbul as a living, breathing sustainability case study",
+    "Build cultural connection with the host city beyond the venue",
+    "Rest and recharge after four intense programme days",
+    "Gather material for the Green Map (local spots, practices, stories)"
+  ],
+  "steps": [
+    {
+      "time": "15 min",
+      "title": "Istanbul Green Explorer briefing",
+      "body": "Facilitator presents the suggested route using the interactive Istanbul map below. Each participant chooses at least 2 'green stops' to visit."
+    },
+    {
+      "time": "180 min",
+      "title": "Free exploration",
+      "body": "Participants explore in self-organised small groups. No facilitator presence — genuine free time. WhatsApp group active for coordination and sharing discoveries in real time."
+    },
+    {
+      "time": "15 min",
+      "title": "Optional: evening sharing",
+      "body": "At dinner, a voluntary round: one thing I found in Istanbul today that belongs on our Green Map. No pressure — just a door left open."
+    }
+  ],
+  "facilitatorNote": "Prepare the map in advance with verified locations — check opening hours, especially for community gardens which may require appointment. Include a mix of well-known spots and hidden gems. The goal is discovery, not tourism.",
+  "interactive": "istanbul-map"
+}

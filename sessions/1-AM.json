@@ -1,0 +1,38 @@
+{
+  "label": "Day 1 — Morning: Arrivals & Orientation",
+  "description": "Day 1 is about landing safely. Participants arrive from four different countries after long journeys — the priority is making everyone feel welcomed, oriented, and at ease before any programme content begins. This slot is purely logistical and relational.",
+  "objectives": [
+    "Ensure all participants arrive and are checked in without stress",
+    "Distribute all practical information (rooms, schedule, meals, house rules)",
+    "Create a first sense of safety and belonging within the group"
+  ],
+  "steps": [
+    {
+      "time": "10 min",
+      "title": "Airport / transfer coordination",
+      "body": "Facilitators coordinate arrivals in shifts. WhatsApp group already active for real-time updates."
+    },
+    {
+      "time": "20 min",
+      "title": "Check-in & room assignment",
+      "body": "Participants receive room keys, welcome pack, and printed daily schedule. Mixed-nationality rooms encouraged."
+    },
+    {
+      "time": "20 min",
+      "title": "Venue tour",
+      "body": "Short walk around the venue — dining area, meeting room, garden, bathrooms, emergency exits."
+    },
+    {
+      "time": "20 min",
+      "title": "Practical briefing",
+      "body": "Meal times, curfew, wifi, emergency contacts, house rules. Keep it short and visual — use the printed one-pager."
+    },
+    {
+      "time": "20 min",
+      "title": "Free time before dinner",
+      "body": "Participants settle in, unpack, rest. No structured activity — first informal conversations happen naturally."
+    }
+  ],
+  "facilitatorNote": "Don't rush this slot. The quality of arrival sets the emotional tone for the entire exchange. If some groups are delayed, adapt — never start a formal session with half the group missing.",
+  "interactive": null
+}

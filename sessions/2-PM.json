@@ -1,0 +1,34 @@
+{
+  "label": "Day 2 — Afternoon: Environmental Awareness Workshop",
+  "description": "The first content session of the exchange. Before diving into green habits and sustainable lifestyles, we need to understand where participants actually stand: what do they know, what do they think they know, and what are the gaps? This session is diagnostic and provocative — designed to spark curiosity, not to lecture.",
+  "objectives": [
+    "Assess the group's baseline knowledge of environmental issues and sustainability",
+    "Challenge assumptions and common misconceptions about green living",
+    "Create a shared vocabulary for the rest of the exchange",
+    "Inspire curiosity and personal connection to the topic"
+  ],
+  "steps": [
+    {
+      "time": "15 min",
+      "title": "Four Corners — Where do you stand?",
+      "body": "Statements are read aloud. Participants move to corners: Strongly Agree / Agree / Disagree / Strongly Disagree. Brief discussion at each corner. No right answers yet — just positions."
+    },
+    {
+      "time": "30 min",
+      "title": "Sustainability Quiz",
+      "body": "Teams compete on the interactive quiz below — 15 questions across categories: climate facts, local green heroes, eco-myths, Istanbul & Turkey, global stats. Fast-paced, scored in real time."
+    },
+    {
+      "time": "25 min",
+      "title": "Myth Busters",
+      "body": "Each team receives 3 'green myths'. They have 10 minutes to discuss and build their argument. Then each team presents — facilitator reveals the nuanced truth after each one."
+    },
+    {
+      "time": "10 min",
+      "title": "Personal connection",
+      "body": "Silent reflection: each participant writes one environmental issue they feel personally connected to and one they know nothing about. Posted on the wall — visible all week."
+    }
+  ],
+  "facilitatorNote": "Avoid presenting yourself as the expert. Your role here is to generate productive confusion — to make participants aware of what they don't know without making them feel stupid. Celebrate wrong answers as much as right ones.",
+  "interactive": "quiz"
+}

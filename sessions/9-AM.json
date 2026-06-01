@@ -1,0 +1,34 @@
+{
+  "label": "Day 9 — Morning: YouthPass & Final Evaluation",
+  "description": "The final morning brings together three things: understanding Erasmus+ and what the YouthPass represents, completing the YouthPass competence self-assessment thoughtfully, and conducting the final programme evaluation.",
+  "objectives": [
+    "Understand the Erasmus+ programme and YouthPass as tools for recognition",
+    "Complete the YouthPass self-assessment with honesty and depth",
+    "Evaluate the exchange programme critically and constructively",
+    "Identify personal learning outcomes and next steps"
+  ],
+  "steps": [
+    {
+      "time": "20 min",
+      "title": "What is Erasmus+ and YouthPass?",
+      "body": "Interactive presentation: what Erasmus+ is, what KA1 Youth Exchange means, how YouthPass works, and why the 8 Key Competences matter beyond this project."
+    },
+    {
+      "time": "35 min",
+      "title": "YouthPass Self-Assessment",
+      "body": "Using the interactive guide below, each participant works through the 8 Key Competences and identifies which ones they developed during NORTH, and how."
+    },
+    {
+      "time": "25 min",
+      "title": "Final Programme Evaluation",
+      "body": "Participants rate each day and each session, identify their top 3 learning moments, give feedback on facilitation, venue, food, and logistics, and share one recommendation for future editions of NORTH."
+    },
+    {
+      "time": "10 min",
+      "title": "Personal letter",
+      "body": "Each participant writes a short letter to themselves — to be opened in 6 months. What did I learn? What did I commit to? What do I hope I will have done by then? Letters are sealed and sent by post in October."
+    }
+  ],
+  "facilitatorNote": "The YouthPass self-assessment is only meaningful if participants have enough time and guidance to be honest. Don't rush it. Read each competence aloud, give examples from specific sessions, and let participants recognise themselves in what they did.",
+  "interactive": "youthpass"
+}

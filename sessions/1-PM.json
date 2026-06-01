@@ -1,0 +1,39 @@
+{
+  "label": "Day 1 — Afternoon: Name Games & Icebreakers",
+  "description": "The first real programme session. At this point participants have eaten together and had time to settle — now we break the ice properly. The goal is simple: learn each other's names, laugh together, and begin to feel like a group rather than four separate national delegations.",
+  "objectives": [
+    "Learn the names of all 32 participants through active play",
+    "Break national clusters and create first cross-cultural connections",
+    "Establish a light, playful group energy that will carry into Day 2",
+    "Generate the first shared memory of the exchange"
+  ],
+  "steps": [
+    {
+      "time": "10 min",
+      "title": "Circle of names",
+      "body": "Standing in a circle: each person says their name + one gesture. The group repeats both. Three rounds, increasing speed."
+    },
+    {
+      "time": "25 min",
+      "title": "Human Bingo",
+      "body": "Each participant gets a bingo card with prompts. First to complete a row wins — but everyone keeps going until time is up. Use the interactive bingo below."
+    },
+    {
+      "time": "20 min",
+      "title": "Name & superpower",
+      "body": "In groups of 6 (mixed nationality): each person introduces themselves with their name + one green superpower they wish they had. Groups then present the most interesting superpowers to the room."
+    },
+    {
+      "time": "15 min",
+      "title": "The name web",
+      "body": "Standing in a circle with a ball of wool. Each person says a name they remember, throws the wool to that person — keeping hold of their thread. The result is a web connecting the whole group."
+    },
+    {
+      "time": "10 min",
+      "title": "Closing reflection",
+      "body": "Brief facilitated debrief: one name you'll definitely remember tomorrow, and why. Then announce tomorrow's theme."
+    }
+  ],
+  "facilitatorNote": "Energy is everything in this session. Move fast between activities, keep music playing between rounds. If the group is shy, model the energy yourself — be the first to do something ridiculous. Mixed-nationality groupings are non-negotiable from the very first moment.",
+  "interactive": "bingo"
+}

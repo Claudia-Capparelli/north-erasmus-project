@@ -1,0 +1,34 @@
+{
+  "label": "Day 4 — Morning: Creative Recycling Workshop",
+  "description": "A hands-on creative session where participants transform waste materials into useful or beautiful objects. This session is deliberately less structured than others — it's about making, not analysing. The outputs become part of the venue's decoration and later the Green Map documentation.",
+  "objectives": [
+    "Experience the creative potential of waste materials directly",
+    "Practice collaboration across language barriers through making",
+    "Document the process as content for the Green Map",
+    "Reconnect with physical, tactile creativity after screen-heavy sessions"
+  ],
+  "steps": [
+    {
+      "time": "10 min",
+      "title": "Inspiration gallery",
+      "body": "5-minute slide show of 20 extraordinary upcycling projects from around the world. No explanation — just images. One question: which one surprised you most?"
+    },
+    {
+      "time": "10 min",
+      "title": "Material marketplace",
+      "body": "All collected materials are laid out on a central table. Teams (4 people, mixed nationality) browse and choose their materials. No instructions yet — just looking and touching."
+    },
+    {
+      "time": "50 min",
+      "title": "Making time",
+      "body": "Teams create their object with no further instruction. Facilitator circulates, asks questions, documents with photos. Music playing. No evaluation, no grading — only making."
+    },
+    {
+      "time": "20 min",
+      "title": "Gallery walk & documentation",
+      "body": "Each team presents their object: what it is, what it was, what it could be used for. Other teams use the gallery documentation tool to record their observations for the Green Map."
+    }
+  ],
+  "facilitatorNote": "Resist the urge to make this session more 'educational' with theory input. The making is the learning. Some groups will struggle with the lack of structure — that's fine. The productive discomfort of 'what do I do with this?' is exactly where creativity begins.",
+  "interactive": "gallery"
+}

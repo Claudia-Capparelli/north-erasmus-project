@@ -1,0 +1,39 @@
+{
+  "label": "Day 2 — Morning: Team Building & Group Agreements",
+  "description": "Day 2 morning is about transforming 32 individuals into one functioning group. Before any content can land, participants need to trust each other and agree on how they want to work together. This session combines physical team-building with a collaborative process to co-create the group's shared agreements.",
+  "objectives": [
+    "Build physical trust and nonverbal communication within mixed-nationality teams",
+    "Identify shared values and working principles across four different cultures",
+    "Co-create a Group Agreement that all participants genuinely own",
+    "Form the four working teams that will collaborate throughout the exchange"
+  ],
+  "steps": [
+    {
+      "time": "20 min",
+      "title": "Blind Architect",
+      "body": "Groups of 8 (2 per country). One person sees a simple structure built from objects; they must describe it to their blindfolded teammates using only words — no gestures. Teams recreate the structure. Debrief: what made communication work or fail?"
+    },
+    {
+      "time": "20 min",
+      "title": "Values Marketplace",
+      "body": "Cards with values are spread on the floor. Each participant picks their top 3. In mixed groups they negotiate down to 5 shared values. Groups present to the room."
+    },
+    {
+      "time": "25 min",
+      "title": "Group Agreement Canvas",
+      "body": "Using the interactive canvas below, the group builds their agreements together: How do we communicate? How do we handle conflict? What do we expect from each other? What are our non-negotiables?"
+    },
+    {
+      "time": "10 min",
+      "title": "Signing the Agreement",
+      "body": "The final agreement is displayed. Each participant signs with their name or emoji. It stays visible throughout the exchange."
+    },
+    {
+      "time": "15 min",
+      "title": "Team formation",
+      "body": "Facilitator introduces the 4 working teams (mixed nationality) that will be used for output work from Day 6 onward. Teams choose a name related to nature or sustainability."
+    }
+  ],
+  "facilitatorNote": "The Group Agreement is not a formality — it is a genuine social contract. Invest time in making it real. If participants rush through it, slow them down: ask 'do you really mean this?' and 'what would this look like in practice?' The agreement will be your best tool for managing conflict later.",
+  "interactive": "agreement"
+}

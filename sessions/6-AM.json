@@ -1,0 +1,34 @@
+{
+  "label": "Day 6 — Morning: Micro-Green Solutions Workshop",
+  "description": "Micro-green solutions are small-scale, accessible environmental interventions that individuals or small communities can implement without institutional support. This session introduces the concept through real examples from the four partner countries, then challenges teams to design their own.",
+  "objectives": [
+    "Understand the concept and potential of micro-scale green solutions",
+    "Analyse real examples from Turkey, Spain, North Macedonia and Serbia",
+    "Apply design thinking to develop original, context-specific solutions",
+    "Produce solution concepts that will feed into the Green Map and Escape Room"
+  ],
+  "steps": [
+    {
+      "time": "15 min",
+      "title": "What is a micro-green solution?",
+      "body": "Definition and 6 real examples: community seed library (Serbia), rooftop herb garden (Istanbul), repair café (Spain), rainwater collection system (North Macedonia), food waste composting collective (Turkey), neighbourhood clothing swap (Spain)."
+    },
+    {
+      "time": "10 min",
+      "title": "Design Thinking intro",
+      "body": "Lightning intro to the 5 stages: Empathise → Define → Ideate → Prototype → Test. We'll use a compressed version: today we focus on Empathise + Define + Ideate."
+    },
+    {
+      "time": "35 min",
+      "title": "Solution Sprint",
+      "body": "Teams use the interactive Design Thinking canvas below. Each team picks ONE problem from their country context. They empathise (who is affected?), define (what is the core problem?), and generate at least 5 solution ideas in rapid succession."
+    },
+    {
+      "time": "20 min",
+      "title": "Pitch & feedback",
+      "body": "Each team presents their top idea in 90 seconds. Other teams give feedback using the '2 stars and a wish' format. Facilitator captures the best ideas — these become candidate entries for the Green Map."
+    }
+  ],
+  "facilitatorNote": "The Design Thinking canvas works best when teams fight the urge to evaluate ideas too early. If you hear 'that won't work' before the ideation phase is over, stop the group and remind them: quantity first, quality later.",
+  "interactive": "design-canvas"
+}

@@ -1,0 +1,34 @@
+{
+  "label": "Day 3 — Morning: Sustainable Lifestyles",
+  "description": "We now zoom in from global awareness to personal lifestyle. This session makes sustainability tangible and individual: each participant calculates their own carbon footprint and compares it with others across different countries and contexts.",
+  "objectives": [
+    "Calculate and understand individual carbon footprints",
+    "Compare lifestyle impacts across four different national contexts",
+    "Identify the highest-impact areas for personal change",
+    "Move from abstract statistics to personal, actionable insight"
+  ],
+  "steps": [
+    {
+      "time": "10 min",
+      "title": "What is a carbon footprint?",
+      "body": "Quick visual intro: what counts, what doesn't, how it's measured. Key stat: the average EU citizen produces 8.4 tonnes CO₂e per year. What does that actually mean?"
+    },
+    {
+      "time": "35 min",
+      "title": "Personal Carbon Calculator",
+      "body": "Using the interactive calculator below, each participant calculates their own footprint across categories: food, transport, home energy, consumption, travel. Results are kept personal — this is not a competition."
+    },
+    {
+      "time": "25 min",
+      "title": "Country Comparison",
+      "body": "Teams share their category averages (not individual totals). Facilitator plots these on the live matrix below. Discussion: why are some categories so different across countries? What explains the gaps?"
+    },
+    {
+      "time": "20 min",
+      "title": "My One Thing",
+      "body": "Each participant identifies the one category where they could most realistically reduce their footprint — and writes one specific action they could take within 30 days. Shared with their small group."
+    }
+  ],
+  "facilitatorNote": "The carbon calculator can trigger guilt or defensiveness — especially when participants from lower-income countries see that their footprint is already much lower than their European peers. Address this proactively: the goal is not blame, but understanding. The structural vs individual responsibility tension is a rich discussion point.",
+  "interactive": "carbon"
+}

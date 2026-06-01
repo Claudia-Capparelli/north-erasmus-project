@@ -1,0 +1,34 @@
+{
+  "label": "Day 3 — Afternoon: Green Habits in Daily Life",
+  "description": "From footprints to choices: this session uses scenario-based decision-making to explore how everyday habits connect to sustainability outcomes. Participants make choices as characters from different countries and contexts — then examine the consequences.",
+  "objectives": [
+    "Explore the sustainability implications of everyday lifestyle choices",
+    "Understand how context (income, infrastructure, culture) shapes choices",
+    "Practice systems thinking: tracing choices to upstream and downstream effects",
+    "Develop empathy for different lived experiences of sustainability"
+  ],
+  "steps": [
+    {
+      "time": "10 min",
+      "title": "Character assignment",
+      "body": "Each participant receives a character card: a person from one of the four partner countries with a specific age, income, location, and lifestyle. They will make decisions as that character throughout the session."
+    },
+    {
+      "time": "40 min",
+      "title": "A Day in the Life — Scenario Choices",
+      "body": "Using the interactive scenario tool below, participants make 10 everyday choices for their character: morning commute, lunch, shopping, energy use, etc. Each choice has visible sustainability consequences."
+    },
+    {
+      "time": "20 min",
+      "title": "Debriefing the characters",
+      "body": "Participants share what surprised them about their character's constraints. Group discussion: which choices were actually choices? Which were determined by context? What does 'green living' mean when you can't afford it?"
+    },
+    {
+      "time": "10 min",
+      "title": "From character to self",
+      "body": "Return to your own life. Which of your character's constraints do you recognise in yourself? Which privileges do you have that your character didn't? One insight to share."
+    }
+  ],
+  "facilitatorNote": "The character exercise only works if participants genuinely inhabit their character rather than playing themselves. The moment of 'I can't choose differently — I can't afford it' is the most powerful in this session. Don't rush past it.",
+  "interactive": "scenario"
+}
